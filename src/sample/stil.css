@@ -1,3 +1,26 @@
-.pozadina{
-    -fx-background-color: antiquewhite;
+#prijavaBtn {
+    -fx-background-color: lightskyblue;
+    -fx-font-family:verdana;
+    -fx-font-size:20;
+    -fx-font-weight: bold;
+    -fx-stroke:navy;
+    -fx-font-style:italic;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+.label {
+    -fx-text-fill: #191970;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-font-family: Arial;
+    -fx-font-smoothing-type: gray;
+    -fx-font-size: 12;
+}
+.poljeNijeIspravno {
+    -fx-background-color: lightpink;
+}
+
+.body {
+    -fx-background-color: 	#FFF8DC ;
 }
