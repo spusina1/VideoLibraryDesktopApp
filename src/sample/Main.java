@@ -21,11 +21,11 @@ public class Main extends Application {
         VideotekaModel model = VideotekaModel.dajInstancu();
         //model.napuni();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("filmovi.fxml"));
-        loader.setController(new FimoviController(model));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("prijava.fxml"));
+        loader.setController(new PrijavaController(model));
         Parent root = loader.load();
         primaryStage.setTitle("Videoteka");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 600, 350));
         primaryStage.show();
     }
 
