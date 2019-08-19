@@ -15,7 +15,7 @@
     -fx-font-style: italic;
     -fx-font-family: Arial;
     -fx-font-smoothing-type: gray;
-    -fx-font-size: 18;
+    -fx-font-size: 13;
 }
 .poljeNijeIspravno {
     -fx-background-color: lightpink;
