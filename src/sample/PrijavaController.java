@@ -21,7 +21,10 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class PrijavaController implements Initializable{
@@ -35,12 +38,19 @@ public class PrijavaController implements Initializable{
     public TextField ime;
     public TextField prezime;
     public TextField brojMobitela;
+    public TextField adresa;
+    public TextField novoKorisnickoIme;
     public PasswordField novaLozinka;
-    public DatePicker datumRodjenja;
+
     public Button registracija;
 
 
+    private VideotekaModel model;
 
+
+    public PrijavaController(VideotekaModel m) {
+        model = m;
+    }
 
     @FXML
     public void initialize() {korisnickoIme.getStyleClass().add("poljeNijeIspravno");
@@ -60,6 +70,18 @@ public class PrijavaController implements Initializable{
     public void prijavi(ActionEvent actionEvent){
 
         //otvaranje novog prozora
+        //System.out.println(korisnickoIme.getText());
+        Korisnik trenutniKorisnik = model.pronadjiKorisnika(korisnickoIme.getText(), lozinka.getText());
+        if(trenutniKorisnik==null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Greška!");
+            alert.setContentText("Nepostojeci korisnicki racun!");
+            alert.show();
+        }
+        else{
+
+            model.setTrenutniKorisnik(trenutniKorisnik);
 
         if(!validacijaPrijave()){ korisnickoIme.getStyleClass().add("poljeNijeIspravno");
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -71,21 +93,24 @@ public class PrijavaController implements Initializable{
         }else {korisnickoIme.getStyleClass().removeAll("poljeNijeIspravno");
             try{
 
+               System.out.println(model.getTrenutniKorisnik());
+
                 Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"));
                 Stage stage=new Stage();
                 stage.setTitle("Glavni izbornik");
-                stage.setScene(new Scene(root, 600, 400));
-                stage.setResizable(false);
+                stage.setScene(new Scene(root, 300, 300));
                 stage.show();
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        }
 
     }
 
     private boolean validacijaPrijave(){
+
         String kIme = korisnickoIme.getText();
         if (kIme.isEmpty() || kIme.charAt(0)<'A' || kIme.charAt(0)>'Z') {
             return false;
@@ -169,20 +194,6 @@ public class PrijavaController implements Initializable{
 
 
 
-        datumRodjenja.valueProperty().addListener((ow, o, n) -> {
-            if (validanDatumRodjenja(n)) {
-                datumRodjenja.getStyleClass().removeAll("poljeNijeIspravno");
-                logicka5=true;
-
-
-            } else {
-
-                datumRodjenja.getStyleClass().add("poljeNijeIspravno");
-                logicka5=false;
-
-            }
-        });
-
 
     }
 
@@ -231,12 +242,41 @@ public class PrijavaController implements Initializable{
 
     public void registriraj(javafx.event.ActionEvent actionEvent) {
 
-        if(!(logicka5 && logicka1 && logicka2 && logicka3 && logicka4)){
+
+        if(!( logicka1 && logicka2 && logicka3 && logicka4)){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText("Podaci nisu validni!");
             alert.setContentText("Provjerite da li ste ispravno unijeli sve podatke!");
             alert.show();}
+        else if(model.postojecaKorisnickaImena().contains(novoKorisnickoIme.getText())){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Korisnicko ime vec postoji!");
+            alert.setContentText("Pokušajte unijeti neko drugo korisnicko ime!");
+            alert.show();}
+
+        else{
+
+            String pattern = "yyyy-MM-dd";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            Korisnik noviKorisnik =  new Korisnik(ime.getText(), prezime.getText(),adresa.getText(), brojMobitela.getText(), new Date(), novoKorisnickoIme.getText(), novaLozinka.getText());
+            System.out.println(noviKorisnik);
+            try {
+                model.spremiNovogKorisnika(noviKorisnik);
+                model.setTrenutniKorisnik(noviKorisnik);
+                Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"));
+                Stage stage=new Stage();
+                stage.setTitle("Glavni izbornik");
+                stage.setScene(new Scene(root, 300, 300));
+                stage.show();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
 }
 
