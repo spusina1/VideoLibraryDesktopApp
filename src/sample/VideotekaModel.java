@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class VideotekaModel {
@@ -18,6 +19,10 @@ public class VideotekaModel {
 
     private ObservableList<Sezona> sezone = FXCollections.observableArrayList();
     private ObjectProperty<Sezona> trenutnaSezona = null;
+
+
+    private ObservableList<Korisnik> korisnici = FXCollections.observableArrayList();
+    private ObjectProperty<Korisnik> trenutniKorisnik = null;
 
     public String getTrenutniZanr() {
         return trenutniZanr;
@@ -32,7 +37,7 @@ public class VideotekaModel {
     private static VideotekaModel instanca = null;
 
     private Connection conn;
-    private PreparedStatement stmt, stmt2, stmt3;
+    private PreparedStatement stmt, stmt2, stmt3, stm4;
 
     private VideotekaModel() {
         try {
@@ -41,10 +46,12 @@ public class VideotekaModel {
             stmt = conn.prepareStatement("SELECT naziv, reziser, zanr, cijena, vrijemeTrajanja FROM filmovi");
             stmt2 = conn.prepareStatement("SELECT naziv, reziser, zanr FROM serije");
             stmt3 = conn.prepareStatement("SELECT naziv, vrijemeTrajanja, cijena, idSerije FROM sezone");
+            stm4 = conn.prepareStatement("SELECT ime, prezime, adresa, brojTelefona, datumUclanjivanja, korisnickoIme, lozinka FROM korisnici");
 
             ResultSet rs = stmt.executeQuery();
             ResultSet rs2 = stmt2.executeQuery();
             ResultSet rs3 = stmt3.executeQuery();
+            ResultSet rs4 = stm4.executeQuery();
 
             while (rs.next()) {
                 // System.out.println()
@@ -71,6 +78,16 @@ public class VideotekaModel {
 
                 if (trenutnaSezona == null) trenutnaSezona = new SimpleObjectProperty<Sezona>(sezona);
             }
+            while (rs4.next()) {
+                // System.out.println()
+                Korisnik korisnik = new Korisnik(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4), rs4.getDate(5), rs4.getString(6), rs4.getString(7));
+
+                korisnici.add(korisnik);
+
+                if (trenutniKorisnik == null) trenutniKorisnik = new SimpleObjectProperty<Korisnik>(korisnik);
+            }
+
+
 
         } catch(SQLException e) {
             System.out.println("Neuspješno čitanje iz baze: " + e.getMessage());
@@ -179,6 +196,13 @@ public class VideotekaModel {
         return sezoneSerije;
     }
 
+    public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka){
+        for (Korisnik korisnik:korisnici){
+            if(korisnik.getKorisnickoIme().equals(korisnickoIme) && korisnik.getLozinka().equals(lozinka)) return korisnik;
+        }
+        return null;
+    }
+
 
     public void setFilmovi(ObservableList<Film> filmovi) {
         this.filmovi = filmovi;
@@ -247,5 +271,50 @@ public class VideotekaModel {
 
     public void setTrenutnaSezona(Sezona trenutnaSezona) {
         this.trenutnaSezona.set(trenutnaSezona);
+    }
+
+    public ObservableList<Korisnik> getKorisnici() {
+        return korisnici;
+    }
+
+    public void setKorisnici(ObservableList<Korisnik> korisnici) {
+        this.korisnici = korisnici;
+    }
+
+    public Korisnik getTrenutniKorisnik() {
+        return trenutniKorisnik.get();
+    }
+
+    public ObjectProperty<Korisnik> trenutniKorisnikProperty() {
+        return trenutniKorisnik;
+    }
+
+    public void setTrenutniKorisnik(Korisnik trenutniKorisnik) {
+        this.trenutniKorisnik.set(trenutniKorisnik);
+    }
+
+    public void spremiNovogKorisnika(Korisnik korisnik) throws SQLException {
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        PreparedStatement unosKorisnika = conn.prepareStatement("INSERT INTO korisnici VALUES (?, ?, ?, ?, ?, ?, ?, ? )");
+        unosKorisnika.setString(2, korisnik.getIme());
+        unosKorisnika.setString(3, korisnik.getPrezime());
+        unosKorisnika.setString(4, korisnik.getAdresa());
+        unosKorisnika.setString(5, korisnik.getBrojTelefona());
+        unosKorisnika.setDate(6, Date.valueOf(simpleDateFormat.format(korisnik.getDatumUclanjivanja())));
+        unosKorisnika.setString(7, korisnik.getKorisnickoIme());
+        unosKorisnika.setString(8, korisnik.getLozinka());
+        unosKorisnika.executeUpdate();
+    }
+
+    public ArrayList<String> postojecaKorisnickaImena(){
+        ArrayList<String > korisnickaImena = new ArrayList<>();
+        for (Korisnik k: korisnici
+             ) {
+            korisnickaImena.add(k.getKorisnickoIme());
+        }
+        return korisnickaImena;
     }
 }
