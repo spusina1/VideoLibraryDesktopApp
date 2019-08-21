@@ -2,8 +2,11 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+
+import java.sql.SQLException;
 
 public class SerijeController {
 
@@ -52,7 +55,27 @@ public class SerijeController {
         }
     }
 
-    public void ispisiSeriju(ActionEvent actionEvent) {
+    public void ispisiSeriju(ActionEvent actionEvent) throws SQLException {
+
+        model.getTrenutniKorisnik().getListaIznajmljenihSadrzaja().clear();
+        model.getTrenutniKorisnik().getListaNedavnihPregleda().clear();
+
+        model.dohvatiNarudzbe();
+
+        if(model.getTrenutniKorisnik().getListaIznajmljenihSadrzaja().size()<4){
+
+
+            System.out.println(model.getTrenutniKorisnik().getListaIznajmljenihSadrzaja().size());
+            model.spremiNoviNajam(model.getTrenutniKorisnik().getKorisnickoIme(), null, model.getTrenutnaSerija().getNaziv(), model.getTrenutnaSezona().getNaziv(), 1);
+
+        }
+        else    {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Greška!");
+            alert.setContentText("Ne možete iznajmiti više od 4 filma/serije!");
+            alert.show();}
+        //model.ispisiFilmove();
         model.ispisiSerije();
     }
 

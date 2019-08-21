@@ -1,9 +1,11 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +29,7 @@ public class KorisniciController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
 
 
         String pattern = "yyyy-MM-dd";
@@ -55,7 +57,23 @@ public class KorisniciController {
             e.printStackTrace();
         }
 
+        model.getTrenutniKorisnik().getListaIznajmljenihSadrzaja().clear();
+        model.getTrenutniKorisnik().getListaNedavnihPregleda().clear();
 
+        model.dohvatiNarudzbe();
+
+        listaIznajmljenih.setItems(model.getTrenutniKorisnik().getListaIznajmljenihSadrzaja());
+        listaHistorije.setItems(model.getTrenutniKorisnik().getListaNedavnihPregleda());
+
+        listaHistorije.setMouseTransparent(true);
+
+
+    }
+
+    public void vrati(ActionEvent actionEvent) throws SQLException {
+        listaIznajmljenih.getSelectionModel().getSelectedItem();
+        model.vratiNajam(listaIznajmljenih.getSelectionModel().getSelectedItem());
+        listaIznajmljenih.getItems().remove( listaIznajmljenih.getSelectionModel().getSelectedItem());
     }
 
 }

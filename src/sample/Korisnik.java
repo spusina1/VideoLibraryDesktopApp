@@ -1,6 +1,8 @@
 package sample;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,8 +20,9 @@ public class Korisnik {
     private Date datumUclanjivanja = new Date();
     private SimpleStringProperty korisnickoIme = new SimpleStringProperty("");
     private SimpleStringProperty lozinka = new SimpleStringProperty("");
-    List<Object> listaIznajmljenihSadrzaja = new ArrayList<Object>();
-    List<Object> listaNedavnihPregleda = new ArrayList<Object>();
+
+    ObservableList<Object> listaIznajmljenihSadrzaja = FXCollections.observableArrayList();
+    ObservableList<Object> listaNedavnihPregleda = FXCollections.observableArrayList();
 
 
 
@@ -122,5 +125,33 @@ public class Korisnik {
 
     public void setLozinka(String lozinka) {
         this.lozinka.set(lozinka);
+    }
+
+
+
+
+
+    public void dodajUListuIznajmljenih(Object o){
+        this.listaIznajmljenihSadrzaja.add(o);
+    }
+
+    public void dodajUListuHistorije(Object o){
+        this.listaNedavnihPregleda.add(o);
+    }
+
+    public ObservableList<Object> getListaIznajmljenihSadrzaja() {
+        return listaIznajmljenihSadrzaja;
+    }
+
+    public void setListaIznajmljenihSadrzaja(ObservableList<Object> listaIznajmljenihSadrzaja) {
+        this.listaIznajmljenihSadrzaja = listaIznajmljenihSadrzaja;
+    }
+
+    public ObservableList<Object> getListaNedavnihPregleda() {
+        return listaNedavnihPregleda;
+    }
+
+    public void setListaNedavnihPregleda(ObservableList<Object> listaNedavnihPregleda) {
+        this.listaNedavnihPregleda = listaNedavnihPregleda;
     }
 }

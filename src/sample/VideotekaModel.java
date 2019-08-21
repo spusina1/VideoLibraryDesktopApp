@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class VideotekaModel {
@@ -316,5 +317,69 @@ public class VideotekaModel {
             korisnickaImena.add(k.getKorisnickoIme());
         }
         return korisnickaImena;
+    }
+
+    public void spremiNoviNajam(String korisnikId, String filmId, String serijaId, String sezonaId, int logicka) throws SQLException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        PreparedStatement unosNajma = conn.prepareStatement("INSERT INTO najam VALUES (?, ?, ?, ?, ?, ?, ? )");
+        unosNajma.setString(2, korisnikId);
+        unosNajma.setString(3, filmId);
+        unosNajma.setString(4, serijaId);
+        unosNajma.setString(5, sezonaId);
+        unosNajma.setDate(6, Date.valueOf(simpleDateFormat.format(new java.util.Date())));
+        unosNajma.setInt(7, logicka);
+        unosNajma.executeUpdate();
+    }
+
+    public  void dohvatiNarudzbe() throws SQLException {
+        PreparedStatement stm = conn.prepareStatement("SELECT korisnickoIme, filmNaziv, serijaNaziv, sezonaNaziv, datumIznajmljivanja, aktivnaNarudzba FROM najam");
+        ResultSet rs = stm.executeQuery();
+
+        while (rs.next()) {
+            System.out.println(rs.getString(1));
+            System.out.println(rs.getString(2));
+            System.out.println(String.valueOf(rs.getInt(6)));
+            System.out.println(getTrenutniKorisnik().getKorisnickoIme());
+
+            if(rs.getString(1).equals(getTrenutniKorisnik().getKorisnickoIme())) {
+                if(rs.getString(2) != null){
+                    Film f = pronadjiFilm(rs.getString(2));
+                    if(rs.getInt(6)==1)
+                       // System.out.println(f.getNaziv());
+                    getTrenutniKorisnik().dodajUListuIznajmljenih(f);
+                    getTrenutniKorisnik().dodajUListuHistorije(f);
+                }
+                else{
+                    Serija s = pronadjiSeriju(rs.getString(3));
+                    if(rs.getInt(6)==1)
+                        getTrenutniKorisnik().dodajUListuIznajmljenih(s);
+                    getTrenutniKorisnik().dodajUListuHistorije(s);
+                }
+            }
+
+
+
+        }
+    }
+
+    public void vratiNajam(Object o) throws SQLException {
+        if(o instanceof Film){
+            Film f = pronadjiFilm(((Film) o).getNaziv());
+            PreparedStatement vracanjeNajma = conn.prepareStatement("UPDATE najam SET aktivnaNarudzba=? WHERE korisnickoIme = ? AND  filmNaziv = ?");
+            vracanjeNajma.setInt(1,0);
+            vracanjeNajma.setString(2, getTrenutniKorisnik().getKorisnickoIme());
+            vracanjeNajma.setString(3, ((Film) o).getNaziv());
+            vracanjeNajma.executeUpdate();
+        }
+        else{
+            Serija s = pronadjiSeriju(((Serija) o).getNaziv());
+            PreparedStatement vracanjeNajma = conn.prepareStatement("UPDATE najam SET aktivnaNarudzba=? WHERE korisnickoIme = ? AND  serijaNaziv = ?");
+            vracanjeNajma.setInt(1,0);
+            vracanjeNajma.setString(2, getTrenutniKorisnik().getKorisnickoIme());
+            vracanjeNajma.setString(3, ((Serija) o).getNaziv());
+            vracanjeNajma.executeUpdate();
+        }
     }
 }
