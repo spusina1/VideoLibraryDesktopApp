@@ -40,7 +40,7 @@ public class PrijavaController implements Initializable{
 
     public TextField korisnickoIme;
     public PasswordField lozinka;
-    public Button prijava;
+    public static Button prijava;
 
     public TextField ime;
     public TextField prezime;
@@ -120,6 +120,17 @@ public class PrijavaController implements Initializable{
                 stage.setScene(new Scene(root, 300, 300));
                 //stage.setResizable(false);
                 stage.show();
+
+
+                korisnickoIme.clear();
+                lozinka.clear();
+                ime.clear();
+                prezime.clear();
+                adresa.clear();
+                brojMobitela.clear();
+                novaLozinka.clear();
+                novoKorisnickoIme.clear();
+
 
             } catch (IOException e) {
                 e.printStackTrace();

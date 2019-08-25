@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 
 import java.sql.SQLException;
 
@@ -19,6 +20,7 @@ public class FimoviController {
     public TextField filmZanr;
     public TextField filmCijena;
     public  TextField filmTrajanje;
+    public static BorderPane paneFilm;
     //public ListView listaKnjiga;
 
     public FimoviController(VideotekaModel m) {

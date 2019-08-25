@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <?import java.net.URL?>
-<GridPane styleClass="body" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.GlavniIzbornikController">
+<GridPane fx:id="pane" styleClass="body" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.GlavniIzbornikController">
     <stylesheets>
         <URL value="@stil.css" />
     </stylesheets>
@@ -23,9 +23,9 @@
   </rowConstraints>
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="16.0" prefWidth="606.0" text="%glavniIzbornik" textAlignment="CENTER" />
-      <Button mnemonicParsing="false" onAction="#izborFilma" text="%filmovi" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-      <Button mnemonicParsing="false" onAction="#izborSerije" text="%serije" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" onAction="#pregledajPodatke" text="%korisnik" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-      <Button mnemonicParsing="false" onAction="#odjaviKorisnika" text="%odjava" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <Button style="-fx-background-color: #ffffcc; " mnemonicParsing="false" onAction="#izborFilma" text="%filmovi" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+      <Button style="-fx-background-color:#ffffcc;" mnemonicParsing="false" onAction="#izborSerije" text="%serije" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <Button style="-fx-background-color: #ffffcc;" mnemonicParsing="false" onAction="#pregledajPodatke" text="%korisnik" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+      <Button style="-fx-background-color: #00cc66;" mnemonicParsing="false" onAction="#odjaviKorisnika" text="%odjava" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
    </children>
 </GridPane>

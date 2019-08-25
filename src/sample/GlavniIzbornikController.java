@@ -1,9 +1,11 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -11,9 +13,14 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
+import static sample.FimoviController.paneFilm;
 import static sample.PrijavaController.appJezik;
 
 public class GlavniIzbornikController {
+
+    public GridPane pane;
+
 
     VideotekaModel model = VideotekaModel.dajInstancu();
 
@@ -79,7 +86,27 @@ public class GlavniIzbornikController {
 
     public void odjaviKorisnika(javafx.event.ActionEvent actionEvent) {
 
+      model.setTrenutniKorisnik(null);
+       // Platform.exit();
 
+        Stage primaryStage = (Stage)pane.getScene().getWindow();
+        primaryStage.close();
+
+
+//        System.out.println(appJezik);
+//        Locale.setDefault(appJezik);
+//        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+//        Parent root = null;
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("prijava.fxml"), bundle);
+//            loader.setController(this);
+//            root = loader.load();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return;
+//        }
+//        primaryStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+//        primaryStage.show();
 
     }
 
