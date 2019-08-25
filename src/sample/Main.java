@@ -15,14 +15,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-//
-//        Parent root = FXMLLoader.load(getClass().getResource("prijava.fxml"));
-//        primaryStage.setTitle("Aplikacija za videoteku");
-//        primaryStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
-//        primaryStage.show();
-
         VideotekaModel model = VideotekaModel.dajInstancu();
-        //model.napuni();
 
         Locale.setDefault(new Locale("bs","BA"));
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
@@ -32,6 +25,7 @@ public class Main extends Application {
         Parent root = loader.load();
         primaryStage.setTitle("Videoteka");
         primaryStage.setScene(new Scene(root, 600, 350));
+        //stage.setResizable(false);
         primaryStage.show();
     }
 

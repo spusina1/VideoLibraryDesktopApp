@@ -118,6 +118,7 @@ public class PrijavaController implements Initializable{
                 Stage stage=new Stage();
                 stage.setTitle("Glavni izbornik");
                 stage.setScene(new Scene(root, 300, 300));
+                //stage.setResizable(false);
                 stage.show();
 
             } catch (IOException e) {
