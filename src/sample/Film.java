@@ -4,6 +4,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.Objects;
+
 public class Film {
 
     private SimpleStringProperty naziv = new SimpleStringProperty("");
@@ -86,5 +88,18 @@ public class Film {
 
     public void setVrijemeTrajanja(int vrijemeTrajanja) {
         this.vrijemeTrajanja.set(vrijemeTrajanja);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Film film = (Film) o;
+        return naziv.equals(film.naziv);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(naziv, reziser, zanr, vrijemeTrajanja, cijena);
     }
 }

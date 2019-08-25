@@ -6,14 +6,31 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
+import java.util.*;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 
 public class VideotekaModel {
 
     private ObservableList<Film> filmovi = FXCollections.observableArrayList();
     private ObjectProperty<Film> trenutniFilm = null;
+    private List<Film> listaFilmova =new ArrayList<>();
 
     private ObservableList<Serija> serije = FXCollections.observableArrayList();
     private ObjectProperty<Serija> trenutnaSerija = null;
@@ -41,6 +58,9 @@ public class VideotekaModel {
     private PreparedStatement stmt, stmt2, stmt3, stm4;
 
     private VideotekaModel() {
+
+
+
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:resources/baza.db");
             System.out.println(conn);
@@ -59,6 +79,7 @@ public class VideotekaModel {
                 Film k = new Film(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5));
 
                 filmovi.add(k);
+                listaFilmova.add(k);
 
                 if (trenutniFilm == null) trenutniFilm = new SimpleObjectProperty<Film>(k);
 
@@ -95,6 +116,40 @@ public class VideotekaModel {
         }
 
         if (trenutniFilm == null) trenutniFilm = new SimpleObjectProperty<>();
+
+
+        try {
+            ucitajXML();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        ResultSet rs = null;
+        try {
+            rs = stmt.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            try {
+                if (!rs.next()) break;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // System.out.println()
+            Film k = null;
+            try {
+                k = new Film(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            filmovi.add(k);
+
+            if (trenutniFilm == null) trenutniFilm = new SimpleObjectProperty<Film>(k);
+
+        }
     }
 
     private static void initialize() {
@@ -381,5 +436,53 @@ public class VideotekaModel {
             vracanjeNajma.setString(3, ((Serija) o).getNaziv());
             vracanjeNajma.executeUpdate();
         }
+    }
+
+    public void ucitajXML() throws SQLException {
+        Document xmldoc = null;
+        try {
+            DocumentBuilder documentReader = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            xmldoc = documentReader.parse(new File("/home/samra/IdeaProjects/aplikacijaZaVideoteku/src/sample/film.xml"));
+        }
+        catch (Exception e) {
+            System.out.println("un.xml nije validan XML dokument");
+
+        }
+
+        Element element = xmldoc.getDocumentElement();
+        NodeList djeca=element.getChildNodes();
+
+
+        for(int i=0; i<djeca.getLength(); i++){
+            Node dijete = djeca.item(i);
+            if(dijete instanceof Element){
+                Film f=new Film();
+                f.setNaziv(((Element) dijete).getElementsByTagName("naziv").item(0).getTextContent());
+                f.setReziser(((Element) dijete).getElementsByTagName("reziser").item(0).getTextContent());
+                f.setZanr(((Element) dijete).getElementsByTagName("zanr").item(0).getTextContent());
+                f.setCijena(Double.parseDouble(((Element) dijete).getElementsByTagName("cijena").item(0).getTextContent()));
+                f.setVrijemeTrajanja(Integer.parseInt(((Element) dijete).getElementsByTagName("vrijemeTrajanja").item(0).getTextContent()));
+
+                System.out.println(listaFilmova.size());
+
+                boolean logicka = true;
+                for(int j=0; j<listaFilmova.size(); j++){
+                    if(listaFilmova.get(j).getNaziv().equals(f.getNaziv()))  logicka=false;
+
+                }
+
+                if(logicka){
+                PreparedStatement unosFilma = conn.prepareStatement("INSERT INTO filmovi VALUES (?, ?, ?, ?, ?, ?)");
+                unosFilma.setString(2, f.getNaziv());
+                unosFilma.setString(3, f.getReziser());
+                unosFilma.setString(4, f.getZanr());
+                unosFilma.setDouble(5, f.getCijena());
+                unosFilma.setInt(6, f.getVrijemeTrajanja());
+                unosFilma.executeUpdate();}
+
+                System.out.println(f);
+            }
+        }
+
     }
 }

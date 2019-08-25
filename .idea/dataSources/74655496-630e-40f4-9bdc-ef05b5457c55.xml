@@ -25,6 +25,7 @@
     <column id="13" parent="6" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
+      <SequenceIdentity>1</SequenceIdentity>
     </column>
     <column id="14" parent="6" name="naziv">
       <Position>2</Position>

@@ -83,7 +83,9 @@ public class PrijavaController implements Initializable{
 
 
 
-    public void prijavi(ActionEvent actionEvent){
+    public void prijavi(ActionEvent actionEvent) {
+
+
 
         //otvaranje novog prozora
         //System.out.println(korisnickoIme.getText());
