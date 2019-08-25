@@ -14,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -25,7 +26,13 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
+
+
+
+
+import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
 public class PrijavaController implements Initializable{
 
@@ -42,7 +49,13 @@ public class PrijavaController implements Initializable{
     public TextField novoKorisnickoIme;
     public PasswordField novaLozinka;
 
+    public ComboBox jezik;
+
+    public GridPane main;
+
     public Button registracija;
+
+    public static Locale appJezik = new Locale("bs", "BA");;
 
 
     private VideotekaModel model;
@@ -51,6 +64,9 @@ public class PrijavaController implements Initializable{
     public PrijavaController(VideotekaModel m) {
         model = m;
     }
+
+
+
 
     @FXML
     public void initialize() {korisnickoIme.getStyleClass().add("poljeNijeIspravno");
@@ -95,7 +111,10 @@ public class PrijavaController implements Initializable{
 
                System.out.println(model.getTrenutniKorisnik());
 
-                Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"));
+               Locale.setDefault(appJezik);
+                System.out.println("Trenutni jezik " + appJezik);
+                ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+                Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"), bundle);
                 Stage stage=new Stage();
                 stage.setTitle("Glavni izbornik");
                 stage.setScene(new Scene(root, 300, 300));
@@ -124,6 +143,19 @@ public class PrijavaController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+
+
+
+        jezik.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+                if(newValue.equals("Bosanski")) bos();
+                else  if(newValue.equals("English")) eng();
+                else if (newValue.equals("Deutsch")) njem();
+                System.out.println("Value is: "+newValue);
+            }
+        });
 
         ime.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -265,7 +297,9 @@ public class PrijavaController implements Initializable{
             try {
                 model.spremiNovogKorisnika(noviKorisnik);
                 model.setTrenutniKorisnik(noviKorisnik);
-                Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"));
+                Locale.setDefault(appJezik);
+                ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+                Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"), bundle);
                 Stage stage=new Stage();
                 stage.setTitle("Glavni izbornik");
                 stage.setScene(new Scene(root, 300, 300));
@@ -279,5 +313,37 @@ public class PrijavaController implements Initializable{
         }
 
 }
+
+    private void PromijeniJezik(Locale j) {
+        Stage primaryStage = (Stage)main.getScene().getWindow();
+        appJezik = j;
+        System.out.println(appJezik);
+        Locale.setDefault(appJezik);
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        Parent root = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("prijava.fxml"), bundle);
+            loader.setController(this);
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        primaryStage.setScene(new Scene(root, USE_COMPUTED_SIZE, USE_COMPUTED_SIZE));
+        primaryStage.show();
+    }
+
+    public void bos() {
+        PromijeniJezik(new Locale("bs","BA"));
+    }
+
+    public void eng() {
+        PromijeniJezik(new Locale("en","US"));
+    }
+
+
+    public void njem() {
+        PromijeniJezik(new Locale("de", "DE"));
+    }
 
 }

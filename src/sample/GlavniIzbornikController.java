@@ -8,6 +8,10 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import static sample.PrijavaController.appJezik;
 
 public class GlavniIzbornikController {
 
@@ -15,8 +19,11 @@ public class GlavniIzbornikController {
 
     public void izborFilma(javafx.event.ActionEvent actionEvent) throws IOException {
 
+        Locale.setDefault(appJezik);
+        System.out.println("Trenutni jezik " + appJezik);
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("filmovi.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("filmovi.fxml"), bundle);
 
         loader.setController(new FimoviController(model));
         Parent root =  loader.load();
@@ -32,7 +39,11 @@ public class GlavniIzbornikController {
 
     public void izborSerije(javafx.event.ActionEvent actionEvent) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("serije.fxml"));
+        Locale.setDefault(appJezik);
+        System.out.println("Trenutni jezik " + appJezik);
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("serije.fxml"), bundle);
 
         loader.setController(new SerijeController(model));
         Parent root =  loader.load();
@@ -49,7 +60,10 @@ public class GlavniIzbornikController {
     public void pregledajPodatke(javafx.event.ActionEvent actionEvent) throws IOException {
 
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("korisnici.fxml"));
+        Locale.setDefault(appJezik);
+        System.out.println("Trenutni jezik " + appJezik);
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("korisnici.fxml"), bundle);
 
         loader.setController(new KorisniciController(model));
         Parent root =  loader.load();

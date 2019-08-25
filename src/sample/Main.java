@@ -7,6 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class Main extends Application {
 
     @Override
@@ -21,7 +24,10 @@ public class Main extends Application {
         VideotekaModel model = VideotekaModel.dajInstancu();
         //model.napuni();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("prijava.fxml"));
+        Locale.setDefault(new Locale("bs","BA"));
+        ResourceBundle bundle = ResourceBundle.getBundle("Translation");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("prijava.fxml"), bundle);
         loader.setController(new PrijavaController(model));
         Parent root = loader.load();
         primaryStage.setTitle("Videoteka");
