@@ -124,6 +124,7 @@
     <column id="37" parent="9" name="id">
       <Position>1</Position>
       <DataType>INTEGER|0s</DataType>
+      <SequenceIdentity>1</SequenceIdentity>
     </column>
     <column id="38" parent="9" name="naziv">
       <Position>2</Position>

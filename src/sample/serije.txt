@@ -1,0 +1,4 @@
+Serija1,Reziser1,Zanr1
+Serija2,Reziser2,Zanr1
+Serija3,Reziser3,Zanr2
+Serija4,Reziser4,Zanr2

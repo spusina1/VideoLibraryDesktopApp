@@ -31,6 +31,7 @@ public class VideotekaModel {
     private ObservableList<Film> filmovi = FXCollections.observableArrayList();
     private ObjectProperty<Film> trenutniFilm = null;
     private List<Film> listaFilmova =new ArrayList<>();
+    private List<Serija> listaSerija = new ArrayList<>();
 
     private ObservableList<Serija> serije = FXCollections.observableArrayList();
     private ObjectProperty<Serija> trenutnaSerija = null;
@@ -93,6 +94,7 @@ public class VideotekaModel {
                 Serija s = new Serija(rs2.getString(1), rs2.getString(2), rs2.getString(3));
 
                 serije.add(s);
+                listaSerija.add(s);
 
                 if (trenutnaSerija == null) trenutnaSerija = new SimpleObjectProperty<Serija>(s);
             }
@@ -150,10 +152,41 @@ public class VideotekaModel {
             }
 
             filmovi.add(k);
+            listaFilmova.add(k);
 
             if (trenutniFilm == null) trenutniFilm = new SimpleObjectProperty<Film>(k);
 
         }
+
+        ucitajSerije();
+
+        ResultSet rs2 = null;
+        try {
+            rs2 = stmt2.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+            try {
+                if (!rs2.next()) break;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // System.out.println()
+            Serija s = null;
+            try {
+                s = new Serija(rs2.getString(1), rs2.getString(2), rs2.getString(3));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            serije.add(s);
+            listaSerija.add(s);
+
+            if (trenutnaSerija == null) trenutnaSerija = new SimpleObjectProperty<Serija>(s);
+
+        }
+
     }
 
     private static void initialize() {
@@ -449,7 +482,7 @@ public class VideotekaModel {
             xmldoc = documentReader.parse(new File("/home/samra/IdeaProjects/aplikacijaZaVideoteku/src/sample/film.xml"));
         }
         catch (Exception e) {
-            System.out.println("un.xml nije validan XML dokument");
+            System.out.println("film.xml nije validan XML dokument");
 
         }
 
@@ -486,6 +519,55 @@ public class VideotekaModel {
 
                 System.out.println(f);
             }
+        }
+
+    }
+
+    public void ucitajSerije(){
+
+        Scanner ulaz=null;
+        ArrayList<Serija> serije = new ArrayList<>();
+
+        try {
+            ulaz = new Scanner(new FileReader("/home/samra/IdeaProjects/aplikacijaZaVideoteku/src/sample/serije.txt"));
+        } catch (FileNotFoundException e) {
+            System.out.println("Datoteka serije.txt ne postoji ili se ne može otvoriti");
+            System.out.println("Greška: " + e);
+        }
+
+        try {
+            if(ulaz!=null)
+                while (ulaz.hasNext()) {
+                    String[] line = ulaz.nextLine().split(",");
+                    String naziv=line[0].trim();
+                    String reziser = line[1].trim();
+                    String zanr = line[2].trim();
+                    Serija s = new Serija(naziv,reziser,zanr);
+                    System.out.println(s);
+
+
+                    boolean logicka = true;
+                    for(int j=0; j<listaSerija.size(); j++){
+                        if(listaSerija.get(j).getNaziv().equals(s.getNaziv()))  logicka=false;
+
+                    }
+
+                    if(logicka){
+                        System.out.println("Tu sam");
+                        PreparedStatement unoseSerije = conn.prepareStatement("INSERT INTO serije VALUES (?, ?, ?, ? )");
+                        unoseSerije.setString(2, s.getNaziv());
+                        unoseSerije.setString(3, s.getReziser());
+                        unoseSerije.setString(4, s.getZanr());
+                        unoseSerije.executeUpdate();}
+                }
+        }
+        catch(Exception e) {
+            System.out.println("Problem pri čitanju/pisanju podataka.");
+            System.out.println("Greška: " + e);
+        }
+        finally {
+            if(ulaz!=null)
+                ulaz.close();
         }
 
     }
