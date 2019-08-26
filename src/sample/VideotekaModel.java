@@ -31,7 +31,9 @@ public class VideotekaModel {
     private ObservableList<Film> filmovi = FXCollections.observableArrayList();
     private ObjectProperty<Film> trenutniFilm = null;
     private List<Film> listaFilmova =new ArrayList<>();
-    private List<Serija> listaSerija = new ArrayList<>();
+    public List<Serija> listaSerija = new ArrayList<>();
+
+    private static SZ sz = new SZ();
 
     private ObservableList<Serija> serije = FXCollections.observableArrayList();
     private ObjectProperty<Serija> trenutnaSerija = null;
@@ -42,6 +44,7 @@ public class VideotekaModel {
 
     private ObservableList<Korisnik> korisnici = FXCollections.observableArrayList();
     private ObjectProperty<Korisnik> trenutniKorisnik = null;
+
 
     public String getTrenutniZanr() {
         return trenutniZanr;
@@ -182,10 +185,13 @@ public class VideotekaModel {
 
             serije.add(s);
             listaSerija.add(s);
+            sz.setSerije(listaSerija);
 
             if (trenutnaSerija == null) trenutnaSerija = new SimpleObjectProperty<Serija>(s);
 
         }
+
+        zapisiXml();
 
     }
 
@@ -570,5 +576,19 @@ public class VideotekaModel {
                 ulaz.close();
         }
 
+    }
+
+    public static void  zapisiXml(){
+        try{
+
+            XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("serije.xml"));
+            izlaz.writeObject(sz);
+            izlaz.close();
+
+            System.out.println("Tu sam");
+        }
+        catch (Exception e){
+            System.out.println("Greška: " + e);
+        }
     }
 }
