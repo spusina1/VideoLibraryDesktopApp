@@ -55,7 +55,8 @@
                 <ListView fx:id="listaIznajmljenih" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7" GridPane.rowSpan="4" />
                 <Label text="%historijaPregleda" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="11" />
                 <ListView fx:id="listaHistorije" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="12" GridPane.rowSpan="4" />
-      <Button style="-fx-background-color: #00cc66;" fx:id="btnVrati" mnemonicParsing="false" onAction="#vrati" text="%vrati" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+      <Button fx:id="btnVrati" mnemonicParsing="false" onAction="#vrati" style="-fx-background-color: #00cc66;" text="%vrati" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="16" GridPane.valignment="CENTER" />
+                <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#stampaj" style="-fx-background-color: #00cc66;" text="izvjestaj" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="16" />
 
             </children>
 </GridPane>

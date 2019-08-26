@@ -54,6 +54,10 @@ public class VideotekaModel {
 
     private static VideotekaModel instanca = null;
 
+    public Connection getConn() {
+        return conn;
+    }
+
     private Connection conn;
     private PreparedStatement stmt, stmt2, stmt3, stm4;
 

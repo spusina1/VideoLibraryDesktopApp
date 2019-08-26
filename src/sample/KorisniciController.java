@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import net.sf.jasperreports.engine.JRException;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -74,6 +75,15 @@ public class KorisniciController {
         listaIznajmljenih.getSelectionModel().getSelectedItem();
         model.vratiNajam(listaIznajmljenih.getSelectionModel().getSelectedItem());
         listaIznajmljenih.getItems().remove( listaIznajmljenih.getSelectionModel().getSelectedItem());
+    }
+
+    public void stampaj(ActionEvent actionEvent) throws SQLException {
+        try {
+            new PrintReport().showReport(model.getConn(), model.getTrenutniKorisnik().getKorisnickoIme());
+        } catch (JRException e1) {
+            e1.printStackTrace();
+        }
+
     }
 
 }

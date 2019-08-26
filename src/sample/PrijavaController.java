@@ -319,6 +319,16 @@ public class PrijavaController implements Initializable{
                 stage.setScene(new Scene(root, 300, 300));
                 stage.show();
 
+
+                korisnickoIme.clear();
+                lozinka.clear();
+                ime.clear();
+                prezime.clear();
+                adresa.clear();
+                brojMobitela.clear();
+                novaLozinka.clear();
+                novoKorisnickoIme.clear();
+
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
