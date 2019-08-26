@@ -9,7 +9,6 @@ import net.sf.jasperreports.engine.JRException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class KorisniciController {
@@ -41,8 +40,6 @@ public class KorisniciController {
         korisnikAdresa.setText(model.getTrenutniKorisnik().getAdresa());
         korisnikBroj.setText(model.getTrenutniKorisnik().getBrojTelefona());
         korisnikDatumUclanjivanja.setText(simpleDateFormat.format(model.getTrenutniKorisnik().getDatumUclanjivanja()));
-//        Date date = model.getTrenutniKorisnik().getDatumUclanjivanja();
-//        int godina = date
 
         int godinaIsteka = Integer.parseInt(korisnikDatumUclanjivanja.getText().substring(0,4));
         godinaIsteka = godinaIsteka+1;

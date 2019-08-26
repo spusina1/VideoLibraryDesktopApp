@@ -21,7 +21,6 @@ public class FimoviController {
     public TextField filmCijena;
     public  TextField filmTrajanje;
     public static BorderPane paneFilm;
-    //public ListView listaKnjiga;
 
     public FimoviController(VideotekaModel m) {
         model = m;
@@ -31,7 +30,6 @@ public class FimoviController {
     public void initialize() {
         izborFilma.setItems(model.dajNaziveFilmova());
         izborZanra.setItems(model.dajNaziveZanrova());
-        //knjigaAutor.textProperty().bindBidirectional(new SimpleStringProperty(model.getTrenutnaKnjiga().getAutor()));
 
         model.trenutniFilmProperty().addListener((obs, oldKnjiga, newKnjiga) -> {
 
@@ -84,13 +82,18 @@ public class FimoviController {
         System.out.println(model.getTrenutniKorisnik().getListaIznajmljenihSadrzaja().size());
         model.spremiNoviNajam(model.getTrenutniKorisnik().getKorisnickoIme(), model.getTrenutniFilm().getNaziv(), null, null, 1);
 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText("Uspješno iznajmljivanje");
+            alert.show();
+
         }
         else    {Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error Dialog");
         alert.setHeaderText("Greška!");
         alert.setContentText("Ne možete iznajmiti više od 4 filma/serije!");
         alert.show();}
-        //model.ispisiFilmove();
+
     }
     public void izabraniZanr(ActionEvent actionEvent){
         model.setTrenutniZanr(izborZanra.getValue());

@@ -8,11 +8,7 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-
-
-import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.*;
@@ -295,7 +291,26 @@ public class VideotekaModel {
         return sezoneSerije;
     }
 
-    public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka){
+    public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) throws SQLException {
+
+        try {
+            PreparedStatement stm4 = conn.prepareStatement("SELECT ime, prezime, adresa, brojTelefona, datumUclanjivanja, korisnickoIme, lozinka FROM korisnici");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+            ResultSet rs4 = stm4.executeQuery();
+
+        while (rs4.next()) {
+            // System.out.println()
+            Korisnik korisnik = new Korisnik(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4), rs4.getDate(5), rs4.getString(6), rs4.getString(7));
+
+            korisnici.add(korisnik);
+
+            if (trenutniKorisnik == null) trenutniKorisnik = new SimpleObjectProperty<Korisnik>(korisnik);
+        }
+
+
         for (Korisnik korisnik:korisnici){
             if(korisnik.getKorisnickoIme().equals(korisnickoIme) && korisnik.getLozinka().equals(lozinka)) return korisnik;
         }

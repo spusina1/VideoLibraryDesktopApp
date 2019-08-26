@@ -4,11 +4,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 public class Korisnik {
 
@@ -23,8 +20,6 @@ public class Korisnik {
 
     ObservableList<Object> listaIznajmljenihSadrzaja = FXCollections.observableArrayList();
     ObservableList<Object> listaNedavnihPregleda = FXCollections.observableArrayList();
-
-
 
 
     public Korisnik() {

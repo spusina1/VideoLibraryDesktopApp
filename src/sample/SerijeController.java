@@ -20,7 +20,6 @@ public class SerijeController {
     public TextField serijaZanr;
     public TextField serijaTrajanje;
     public TextField serijaCijena;
-    //public ListView listaKnjiga;
 
     public SerijeController(VideotekaModel m) {
         model = m;
@@ -68,6 +67,10 @@ public class SerijeController {
             System.out.println(model.getTrenutniKorisnik().getListaIznajmljenihSadrzaja().size());
             model.spremiNoviNajam(model.getTrenutniKorisnik().getKorisnickoIme(), null, model.getTrenutnaSerija().getNaziv(), model.getTrenutnaSezona().getNaziv(), 1);
 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText("Uspješno iznajmljivanje");
+            alert.show();
         }
         else    {
             Alert alert = new Alert(Alert.AlertType.ERROR);

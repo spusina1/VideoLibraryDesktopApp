@@ -6,20 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -83,13 +74,17 @@ public class PrijavaController implements Initializable{
 
 
 
-    public void prijavi(ActionEvent actionEvent) {
+    public void prijavi(ActionEvent actionEvent) throws SQLException {
 
 
 
         //otvaranje novog prozora
         //System.out.println(korisnickoIme.getText());
+
+
+
         Korisnik trenutniKorisnik = model.pronadjiKorisnika(korisnickoIme.getText(), lozinka.getText());
+        model.setTrenutniKorisnik(trenutniKorisnik);
         if(trenutniKorisnik==null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");

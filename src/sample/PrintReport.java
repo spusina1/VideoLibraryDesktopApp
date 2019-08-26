@@ -2,20 +2,13 @@ package sample;
 
 
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
 import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
-import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
+
 import net.sf.jasperreports.swing.JRViewer;
 
 import javax.swing.*;
-import java.io.*;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PrintReport extends JFrame {
