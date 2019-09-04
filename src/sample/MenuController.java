@@ -10,24 +10,24 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static sample.PrijavaController.appJezik;
+import static sample.LoginController.appLanguage;
 
-public class GlavniIzbornikController {
+public class MenuController {
 
     public GridPane pane;
 
 
-    VideotekaModel model = VideotekaModel.dajInstancu();
+    VideotekaModel model = VideotekaModel.getInstance();
 
-    public void izborFilma(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void filmChoice(javafx.event.ActionEvent actionEvent) throws IOException {
 
-        Locale.setDefault(appJezik);
-        System.out.println("Trenutni jezik " + appJezik);
+        Locale.setDefault(appLanguage);
+        System.out.println("Trenutni language " + appLanguage);
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("filmovi.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("films.fxml"), bundle);
 
-        loader.setController(new FimoviController(model));
+        loader.setController(new FilmsController(model));
         Parent root =  loader.load();
 
         Stage primaryStage = new Stage();
@@ -39,15 +39,15 @@ public class GlavniIzbornikController {
     }
 
 
-    public void izborSerije(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void serialChoice(javafx.event.ActionEvent actionEvent) throws IOException {
 
-        Locale.setDefault(appJezik);
-        System.out.println("Trenutni jezik " + appJezik);
+        Locale.setDefault(appLanguage);
+        System.out.println("Trenutni language " + appLanguage);
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("serije.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("serials.fxml"), bundle);
 
-        loader.setController(new SerijeController(model));
+        loader.setController(new SerialsController(model));
         Parent root =  loader.load();
 
         Stage primaryStage = new Stage();
@@ -59,15 +59,15 @@ public class GlavniIzbornikController {
     }
 
 
-    public void pregledajPodatke(javafx.event.ActionEvent actionEvent) throws IOException {
+    public void reviewData(javafx.event.ActionEvent actionEvent) throws IOException {
 
 
-        Locale.setDefault(appJezik);
-        System.out.println("Trenutni jezik " + appJezik);
+        Locale.setDefault(appLanguage);
+        System.out.println("Trenutni language " + appLanguage);
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("korisnici.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("users.fxml"), bundle);
 
-        loader.setController(new KorisniciController(model));
+        loader.setController(new UsersController(model));
         Parent root =  loader.load();
 
         Stage primaryStage = new Stage();
@@ -79,9 +79,9 @@ public class GlavniIzbornikController {
     }
 
 
-    public void odjaviKorisnika(javafx.event.ActionEvent actionEvent) {
+    public void signOutUser(javafx.event.ActionEvent actionEvent) {
 
-      model.setTrenutniKorisnik(null);
+      model.setCurrentUser(null);
        // Platform.exit();
 
         Stage primaryStage = (Stage)pane.getScene().getWindow();

@@ -11,7 +11,7 @@
 
 <GridPane alignment="center" hgap="10" prefWidth="272.0" styleClass="body" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
-        <URL value="@stil.css" />
+        <URL value="@style.css" />
     </stylesheets>
 
             <columnConstraints>
@@ -39,24 +39,24 @@
                 <RowConstraints maxHeight="7.0" minHeight="0.0" prefHeight="0.0" />
             </rowConstraints>
             <children>
-                <Label text="%ime" />
-                <TextField fx:id="korisnikIme" GridPane.columnIndex="1" />
-                <Label text="%prezime" GridPane.rowIndex="1" />
-                <TextField fx:id="korisnikPrezime" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Label text="%adresa" GridPane.rowIndex="2" />
-                <TextField fx:id="korisnikAdresa" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label text="%name" />
+                <TextField fx:id="userName" GridPane.columnIndex="1" />
+                <Label text="%surname" GridPane.rowIndex="1" />
+                <TextField fx:id="userSurname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="%address" GridPane.rowIndex="2" />
+                <TextField fx:id="userAddress" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <Label text="%brojMobitela" GridPane.rowIndex="3" />
-                <TextField fx:id="korisnikBroj" layoutX="135.0" layoutY="72.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <Label text="%datumUclanjivanja" GridPane.rowIndex="4" />
-                <TextField fx:id="korisnikDatumUclanjivanja" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="userMobileNumber" layoutX="135.0" layoutY="72.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="%membershipDate" GridPane.rowIndex="4" />
+                <TextField fx:id="userMembershipDate" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <Label text="%datumIsteka" GridPane.rowIndex="5" />
-                <TextField fx:id="korisnikIstekClanarine" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <TextField fx:id="userMembershipExpirationDate" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                 <Label text="%iznajmljeniSadrzaj" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-                <ListView fx:id="listaIznajmljenih" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7" GridPane.rowSpan="4" />
+                <ListView fx:id="orderList" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7" GridPane.rowSpan="4" />
                 <Label text="%historijaPregleda" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="11" />
-                <ListView fx:id="listaHistorije" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="12" GridPane.rowSpan="4" />
-      <Button fx:id="btnVrati" mnemonicParsing="false" onAction="#vrati" style="-fx-background-color: #00cc66;" text="%vrati" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="16" GridPane.valignment="CENTER" />
-                <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#stampaj" style="-fx-background-color: #00cc66;" text="izvjestaj" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="16" />
+                <ListView fx:id="historyList" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="12" GridPane.rowSpan="4" />
+      <Button fx:id="btnVrati" mnemonicParsing="false" onAction="#returnFilm" style="-fx-background-color: #00cc66;" text="%vrati" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="16" GridPane.valignment="CENTER" />
+                <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#print" style="-fx-background-color: #00cc66;" text="izvjestaj" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="16" />
 
             </children>
 </GridPane>

@@ -11,7 +11,7 @@
 
 <GridPane fx:id="paneFilm" alignment="center" hgap="10" styleClass="body" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
-        <URL value="@stil.css" />
+        <URL value="@style.css" />
     </stylesheets>
 <columnConstraints>
     <ColumnConstraints />
@@ -26,7 +26,7 @@
 </rowConstraints>
 <children>
     <Label text="%film" GridPane.rowIndex="1" />
-    <ChoiceBox fx:id="izborFilma" onAction="#izabraniFilm" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <ChoiceBox fx:id="filmChoice" onAction="#selectedFilm" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
     <GridPane GridPane.columnSpan="2" GridPane.rowIndex="2">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -41,20 +41,20 @@
             <RowConstraints />
         </rowConstraints>
         <children>
-            <Label text="%naziv" />
-            <TextField fx:id="filmNaziv" GridPane.columnIndex="1" />
-            <Label text="%reziser" GridPane.rowIndex="1" />
-            <TextField fx:id="filmReziser" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="%zanr" GridPane.rowIndex="2" />
-            <TextField fx:id="filmZanr" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button style="-fx-background-color: #00cc66;" onAction="#ispisiFilm" text="%naruci" GridPane.rowIndex="5" />
-            <Label text="%cijena" GridPane.rowIndex="4" />
-            <TextField fx:id="filmCijena" layoutX="135.0" layoutY="72.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="%title" />
+            <TextField fx:id="filmTitle" GridPane.columnIndex="1" />
+            <Label text="%director" GridPane.rowIndex="1" />
+            <TextField fx:id="filmDirector" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="%type" GridPane.rowIndex="2" />
+            <TextField fx:id="filmType" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button style="-fx-background-color: #00cc66;" onAction="#orderFilm" text="%naruci" GridPane.rowIndex="5" />
+            <Label text="%price" GridPane.rowIndex="4" />
+            <TextField fx:id="filmPrice" layoutX="135.0" layoutY="72.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label prefHeight="16.0" prefWidth="129.0" text="%vrijeme" GridPane.rowIndex="3" />
-            <TextField fx:id="filmTrajanje" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="filmTime" GridPane.columnIndex="1" GridPane.rowIndex="3" />
         </children>
     </GridPane>
-      <Label layoutX="10.0" layoutY="55.0" text="%zanr" />
-      <ChoiceBox fx:id="izborZanra" onAction="#izabraniZanr" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+      <Label layoutX="10.0" layoutY="55.0" text="%type" />
+      <ChoiceBox fx:id="typeChoice" onAction="#selectedType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 </children>
 </GridPane>

@@ -25,34 +25,28 @@ import java.util.ResourceBundle;
 
 import static javafx.scene.control.PopupControl.USE_COMPUTED_SIZE;
 
-public class PrijavaController implements Initializable{
+public class LoginController implements Initializable{
 
 
-
-    public TextField korisnickoIme;
-    public PasswordField lozinka;
-    public static Button prijava;
-
-    public TextField ime;
-    public TextField prezime;
-    public TextField brojMobitela;
-    public TextField adresa;
-    public TextField novoKorisnickoIme;
-    public PasswordField novaLozinka;
-
-    public ComboBox jezik;
-
+    public TextField userName;
+    public PasswordField password;
+    public TextField name;
+    public TextField surname;
+    public TextField mobileNumber;
+    public TextField address;
+    public TextField newUserName;
+    public PasswordField newPassword;
+    public ComboBox language;
     public GridPane main;
 
-    public Button registracija;
 
-    public static Locale appJezik = new Locale("bs", "BA");;
+    public static Locale appLanguage = new Locale("bs", "BA");;
 
 
     private VideotekaModel model;
 
 
-    public PrijavaController(VideotekaModel m) {
+    public LoginController(VideotekaModel m) {
         model = m;
     }
 
@@ -60,13 +54,16 @@ public class PrijavaController implements Initializable{
 
 
     @FXML
-    public void initialize() {korisnickoIme.getStyleClass().add("poljeNijeIspravno");
+    public void initialize() {
+        userName.getStyleClass().add("poljeNijeIspravno");
 
-    korisnickoIme.textProperty().addListener(new ChangeListener<String>() {
+    userName.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String o, String n) {
-                if (n.isEmpty()) {korisnickoIme.getStyleClass().add("poljeNijeIspravno");
-                } else {korisnickoIme.getStyleClass().removeAll("poljeNijeIspravno");
+                if (n.isEmpty()) {
+                    userName.getStyleClass().add("poljeNijeIspravno");
+                } else {
+                    userName.getStyleClass().removeAll("poljeNijeIspravno");
                 }
             }
         });
@@ -74,18 +71,16 @@ public class PrijavaController implements Initializable{
 
 
 
-    public void prijavi(ActionEvent actionEvent) throws SQLException {
-
+    public void logIn(ActionEvent actionEvent) throws SQLException {
 
 
         //otvaranje novog prozora
-        //System.out.println(korisnickoIme.getText());
+        //System.out.println(userName.getText());
 
 
-
-        Korisnik trenutniKorisnik = model.pronadjiKorisnika(korisnickoIme.getText(), lozinka.getText());
-        model.setTrenutniKorisnik(trenutniKorisnik);
-        if(trenutniKorisnik==null) {
+        User currentUser = model.findUser(userName.getText(), password.getText());
+        model.setCurrentUser(currentUser);
+        if(currentUser ==null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText("Greška!");
@@ -94,24 +89,25 @@ public class PrijavaController implements Initializable{
         }
         else{
 
-            model.setTrenutniKorisnik(trenutniKorisnik);
+            model.setCurrentUser(currentUser);
 
-        if(!validacijaPrijave()){ korisnickoIme.getStyleClass().add("poljeNijeIspravno");
+        if(!logInValidation()){ userName.getStyleClass().add("poljeNijeIspravno");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText("Greška!");
-            alert.setContentText("Korisničko ime mora počinjati s velikim slovom abecede!");
+            alert.setContentText("Korisničko name mora počinjati s velikim slovom abecede!");
             alert.show();
 
-        }else {korisnickoIme.getStyleClass().removeAll("poljeNijeIspravno");
+        }else {
+            userName.getStyleClass().removeAll("poljeNijeIspravno");
             try{
 
-               System.out.println(model.getTrenutniKorisnik());
+               System.out.println(model.getCurrentUser());
 
-               Locale.setDefault(appJezik);
-                System.out.println("Trenutni jezik " + appJezik);
+               Locale.setDefault(appLanguage);
+                System.out.println("Trenutni language " + appLanguage);
                 ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-                Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"), bundle);
+                Parent root= FXMLLoader.load(getClass().getResource("menu.fxml"), bundle);
                 Stage stage=new Stage();
                 stage.setTitle("Glavni izbornik");
                 stage.setScene(new Scene(root, 300, 300));
@@ -119,14 +115,14 @@ public class PrijavaController implements Initializable{
                 stage.show();
 
 
-                korisnickoIme.clear();
-                lozinka.clear();
-                ime.clear();
-                prezime.clear();
-                adresa.clear();
-                brojMobitela.clear();
-                novaLozinka.clear();
-                novoKorisnickoIme.clear();
+                userName.clear();
+                password.clear();
+                name.clear();
+                surname.clear();
+                address.clear();
+                mobileNumber.clear();
+                newPassword.clear();
+                newUserName.clear();
 
 
             } catch (IOException e) {
@@ -137,9 +133,9 @@ public class PrijavaController implements Initializable{
 
     }
 
-    private boolean validacijaPrijave(){
+    private boolean logInValidation(){
 
-        String kIme = korisnickoIme.getText();
+        String kIme = userName.getText();
         if (kIme.isEmpty() || kIme.charAt(0)<'A' || kIme.charAt(0)>'Z') {
             return false;
 
@@ -156,7 +152,7 @@ public class PrijavaController implements Initializable{
 
 
 
-        jezik.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        language.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             public void changed(ObservableValue<? extends String> observable,
                                 String oldValue, String newValue) {
                 if(newValue.equals("Bosanski")) bos();
@@ -166,17 +162,17 @@ public class PrijavaController implements Initializable{
             }
         });
 
-        ime.textProperty().addListener(new ChangeListener<String>() {
+        name.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String o, String n) {
 
-                if (validnoIme(n)) {
-                    ime.getStyleClass().removeAll("poljeNijeIspravno");
+                if (validName(n)) {
+                    name.getStyleClass().removeAll("poljeNijeIspravno");
                     logicka1=true;
 
 
                 } else {
-                    ime.getStyleClass().add("poljeNijeIspravno");
+                    name.getStyleClass().add("poljeNijeIspravno");
                     logicka1=false;
 
                 }
@@ -184,15 +180,15 @@ public class PrijavaController implements Initializable{
             }
         });
 
-        prezime.textProperty().addListener(new ChangeListener<String>() {
+        surname.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String o, String n) {
-                if (validnoPrezime(n)) {
-                    prezime.getStyleClass().removeAll("poljeNijeIspravno");
+                if (validSurname(n)) {
+                    surname.getStyleClass().removeAll("poljeNijeIspravno");
                     logicka2=true;
 
                 } else {
-                    prezime.getStyleClass().add("poljeNijeIspravno");
+                    surname.getStyleClass().add("poljeNijeIspravno");
                     logicka2=false;
 
                 }
@@ -203,30 +199,30 @@ public class PrijavaController implements Initializable{
 
 
 
-        brojMobitela.textProperty().addListener(new ChangeListener<String>() {
+        mobileNumber.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String o, String n) {
-                if (validanKontaktTelefon(n)) {
-                    brojMobitela.getStyleClass().removeAll("poljeNijeIspravno");
+                if (validNumber(n)) {
+                    mobileNumber.getStyleClass().removeAll("poljeNijeIspravno");
                     logicka3=true;
 
                 } else {
-                    brojMobitela.getStyleClass().add("poljeNijeIspravno");
+                    mobileNumber.getStyleClass().add("poljeNijeIspravno");
                     logicka3=false;
 
                 }
             }
         });
 
-        novaLozinka.textProperty().addListener(new ChangeListener<String>() {
+        newPassword.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String o, String n) {
-                if (novaLozinka.getText().length()<8) {
-                    novaLozinka.getStyleClass().add("poljeNijeIspravno");
+                if (newPassword.getText().length()<8) {
+                    newPassword.getStyleClass().add("poljeNijeIspravno");
                     logicka4=false;
 
                 } else {
-                    novaLozinka.getStyleClass().removeAll("poljeNijeIspravno");
+                    newPassword.getStyleClass().removeAll("poljeNijeIspravno");
                     logicka4=true;
 
                 }
@@ -238,7 +234,7 @@ public class PrijavaController implements Initializable{
 
     }
 
-    private boolean validnoIme(String n) {
+    private boolean validName(String n) {
         if (n.trim().isEmpty() || n.length() > 20 || n.charAt(0) < 65 || n.charAt(0) > 90){ return false; }
         for (int i = 1; i < n.length(); i++)
             if (n.charAt(i) < 97 || n.charAt(i) > 122){  return false; }
@@ -246,7 +242,7 @@ public class PrijavaController implements Initializable{
         return true;
     }
 
-    private boolean validnoPrezime(String n) {
+    private boolean validSurname(String n) {
         if (n.trim().isEmpty() || n.length() > 20 || n.charAt(0) < 65 || n.charAt(0) > 90) { return false;}
         for (int i = 1; i < n.length(); i++)
             if (n.charAt(i) < 97 || n.charAt(i) > 122) { return false;}
@@ -255,14 +251,14 @@ public class PrijavaController implements Initializable{
     }
 
 
-    private boolean validanDatumRodjenja(LocalDate d) {
+    private boolean validBirthDate(LocalDate d) {
         LocalDate td = LocalDate.now();
         if (d.isAfter(td) || d.isEqual(td)) {  return false;}
 
             return  true;
     }
 
-    private boolean validanKontaktTelefon(String n) {
+    private boolean validNumber(String n) {
         if(n.length()<9 || n.length()>10) return false;
         String prviDio=n.substring(0,3);
         String drugiDio=n.substring(3);
@@ -281,7 +277,7 @@ public class PrijavaController implements Initializable{
     }
 
 
-    public void registriraj(javafx.event.ActionEvent actionEvent) {
+    public void signUp(javafx.event.ActionEvent actionEvent) {
 
 
         if(!( logicka1 && logicka2 && logicka3 && logicka4)){
@@ -290,39 +286,39 @@ public class PrijavaController implements Initializable{
             alert.setHeaderText("Podaci nisu validni!");
             alert.setContentText("Provjerite da li ste ispravno unijeli sve podatke!");
             alert.show();}
-        else if(model.postojecaKorisnickaImena().contains(novoKorisnickoIme.getText())){
+        else if(model.getCurrentUserNames().contains(newUserName.getText())){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error Dialog");
-            alert.setHeaderText("Korisnicko ime vec postoji!");
-            alert.setContentText("Pokušajte unijeti neko drugo korisnicko ime!");
+            alert.setHeaderText("Korisnicko name vec postoji!");
+            alert.setContentText("Pokušajte unijeti neko drugo korisnicko name!");
             alert.show();}
 
         else{
 
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-            Korisnik noviKorisnik =  new Korisnik(ime.getText(), prezime.getText(),adresa.getText(), brojMobitela.getText(), new Date(), novoKorisnickoIme.getText(), novaLozinka.getText());
-            System.out.println(noviKorisnik);
+            User newUser =  new User(name.getText(), surname.getText(), address.getText(), mobileNumber.getText(), new Date(), newUserName.getText(), newPassword.getText());
+            System.out.println(newUser);
             try {
-                model.spremiNovogKorisnika(noviKorisnik);
-                model.setTrenutniKorisnik(noviKorisnik);
-                Locale.setDefault(appJezik);
+                model.addNewUser(newUser);
+                model.setCurrentUser(newUser);
+                Locale.setDefault(appLanguage);
                 ResourceBundle bundle = ResourceBundle.getBundle("Translation");
-                Parent root= FXMLLoader.load(getClass().getResource("glavniIzbornik.fxml"), bundle);
+                Parent root= FXMLLoader.load(getClass().getResource("menu.fxml"), bundle);
                 Stage stage=new Stage();
                 stage.setTitle("Glavni izbornik");
                 stage.setScene(new Scene(root, 300, 300));
                 stage.show();
 
 
-                korisnickoIme.clear();
-                lozinka.clear();
-                ime.clear();
-                prezime.clear();
-                adresa.clear();
-                brojMobitela.clear();
-                novaLozinka.clear();
-                novoKorisnickoIme.clear();
+                userName.clear();
+                password.clear();
+                name.clear();
+                surname.clear();
+                address.clear();
+                mobileNumber.clear();
+                newPassword.clear();
+                newUserName.clear();
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -333,15 +329,15 @@ public class PrijavaController implements Initializable{
 
 }
 
-    private void PromijeniJezik(Locale j) {
+    private void selectLanguage(Locale j) {
         Stage primaryStage = (Stage)main.getScene().getWindow();
-        appJezik = j;
-        System.out.println(appJezik);
-        Locale.setDefault(appJezik);
+        appLanguage = j;
+        System.out.println(appLanguage);
+        Locale.setDefault(appLanguage);
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("prijava.fxml"), bundle);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"), bundle);
             loader.setController(this);
             root = loader.load();
         } catch (IOException e) {
@@ -353,16 +349,16 @@ public class PrijavaController implements Initializable{
     }
 
     public void bos() {
-        PromijeniJezik(new Locale("bs","BA"));
+        selectLanguage(new Locale("bs","BA"));
     }
 
     public void eng() {
-        PromijeniJezik(new Locale("en","US"));
+        selectLanguage(new Locale("en","US"));
     }
 
 
     public void njem() {
-        PromijeniJezik(new Locale("de", "DE"));
+        selectLanguage(new Locale("de", "DE"));
     }
 
 }

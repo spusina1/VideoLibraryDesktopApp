@@ -24,33 +24,35 @@ import java.io.File;
 
 public class VideotekaModel {
 
-    private ObservableList<Film> filmovi = FXCollections.observableArrayList();
-    private ObjectProperty<Film> trenutniFilm = null;
-    private List<Film> listaFilmova =new ArrayList<>();
-    public List<Serija> listaSerija = new ArrayList<>();
+    private ObservableList<Film> films = FXCollections.observableArrayList();
+    private ObjectProperty<Film> currentFilm = null;
+    private List<Film> filmsList =new ArrayList<>();
+    public List<Serial> serialsList = new ArrayList<>();
 
     private static SZ sz = new SZ();
 
-    private ObservableList<Serija> serije = FXCollections.observableArrayList();
-    private ObjectProperty<Serija> trenutnaSerija = null;
+    private ObservableList<Serial> serials = FXCollections.observableArrayList();
+    private ObjectProperty<Serial> currentSerial = null;
 
-    private ObservableList<Sezona> sezone = FXCollections.observableArrayList();
-    private ObjectProperty<Sezona> trenutnaSezona = null;
-
-
-    private ObservableList<Korisnik> korisnici = FXCollections.observableArrayList();
-    private ObjectProperty<Korisnik> trenutniKorisnik = null;
+    private ObservableList<Season> seasone = FXCollections.observableArrayList();
+    private ObjectProperty<Season> currentSeasone = null;
 
 
-    public String getTrenutniZanr() {
-        return trenutniZanr;
+    private ObservableList<User> users = FXCollections.observableArrayList();
+    private ObjectProperty<User> currentUser = null;
+
+
+    private String currentType = null;
+
+
+
+    public String getCurrentType() {
+        return currentType;
     }
 
-    public void setTrenutniZanr(String trenutniZanr) {
-        this.trenutniZanr = trenutniZanr;
+    public void setCurrentType(String currentType) {
+        this.currentType = currentType;
     }
-
-    private String trenutniZanr = null;
 
     private static VideotekaModel instanca = null;
 
@@ -62,7 +64,6 @@ public class VideotekaModel {
     private PreparedStatement stmt, stmt2, stmt3, stm4;
 
     private VideotekaModel() {
-
 
 
         try {
@@ -82,36 +83,36 @@ public class VideotekaModel {
                 // System.out.println()
                 Film k = new Film(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5));
 
-                filmovi.add(k);
-                listaFilmova.add(k);
+                films.add(k);
+                filmsList.add(k);
 
-                if (trenutniFilm == null) trenutniFilm = new SimpleObjectProperty<Film>(k);
+                if (currentFilm == null) currentFilm = new SimpleObjectProperty<Film>(k);
 
             }
             while (rs2.next()) {
 
-                Serija s = new Serija(rs2.getString(1), rs2.getString(2), rs2.getString(3));
+                Serial s = new Serial(rs2.getString(1), rs2.getString(2), rs2.getString(3));
 
-                serije.add(s);
-                listaSerija.add(s);
+                serials.add(s);
+                serialsList.add(s);
 
-                if (trenutnaSerija == null) trenutnaSerija = new SimpleObjectProperty<Serija>(s);
+                if (currentSerial == null) currentSerial = new SimpleObjectProperty<Serial>(s);
             }
             while (rs3.next()) {
                 // System.out.println()
-                Sezona sezona = new Sezona(rs3.getString(1), rs3.getInt(2), rs3.getDouble(3), rs3.getString(4));
+                Season season = new Season(rs3.getString(1), rs3.getInt(2), rs3.getDouble(3), rs3.getString(4));
 
-                sezone.add(sezona);
+                seasone.add(season);
 
-                if (trenutnaSezona == null) trenutnaSezona = new SimpleObjectProperty<Sezona>(sezona);
+                if (currentSeasone == null) currentSeasone = new SimpleObjectProperty<Season>(season);
             }
             while (rs4.next()) {
                 // System.out.println()
-                Korisnik korisnik = new Korisnik(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4), rs4.getDate(5), rs4.getString(6), rs4.getString(7));
+                User user = new User(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4), rs4.getDate(5), rs4.getString(6), rs4.getString(7));
 
-                korisnici.add(korisnik);
+                users.add(user);
 
-                if (trenutniKorisnik == null) trenutniKorisnik = new SimpleObjectProperty<Korisnik>(korisnik);
+                if (currentUser == null) currentUser = new SimpleObjectProperty<User>(user);
             }
 
 
@@ -120,11 +121,11 @@ public class VideotekaModel {
             System.out.println("Neuspješno čitanje iz baze: " + e.getMessage());
         }
 
-        if (trenutniFilm == null) trenutniFilm = new SimpleObjectProperty<>();
+        if (currentFilm == null) currentFilm = new SimpleObjectProperty<>();
 
 
         try {
-            ucitajXML();
+            loadXML();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -150,14 +151,14 @@ public class VideotekaModel {
                 e.printStackTrace();
             }
 
-            filmovi.add(k);
-            listaFilmova.add(k);
+            films.add(k);
+            filmsList.add(k);
 
-            if (trenutniFilm == null) trenutniFilm = new SimpleObjectProperty<Film>(k);
+            if (currentFilm == null) currentFilm = new SimpleObjectProperty<Film>(k);
 
         }
 
-        ucitajSerije();
+        loadTXT();
 
         ResultSet rs2 = null;
         try {
@@ -172,22 +173,22 @@ public class VideotekaModel {
                 e.printStackTrace();
             }
             // System.out.println()
-            Serija s = null;
+            Serial s = null;
             try {
-                s = new Serija(rs2.getString(1), rs2.getString(2), rs2.getString(3));
+                s = new Serial(rs2.getString(1), rs2.getString(2), rs2.getString(3));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            serije.add(s);
-            listaSerija.add(s);
-            sz.setSerije(listaSerija);
+            serials.add(s);
+            serialsList.add(s);
+            sz.setSerials(serialsList);
 
-            if (trenutnaSerija == null) trenutnaSerija = new SimpleObjectProperty<Serija>(s);
+            if (currentSerial == null) currentSerial = new SimpleObjectProperty<Serial>(s);
 
         }
 
-        zapisiXml();
+        recordXML();
 
     }
 
@@ -195,103 +196,103 @@ public class VideotekaModel {
         instanca = new VideotekaModel();
     }
 
-    public static VideotekaModel dajInstancu() {
+    public static VideotekaModel getInstance() {
         if (instanca == null) initialize();
         return instanca;
     }
 
 
-    public ObservableList<Film> getFilmovi() {
-        return filmovi;
+    public ObservableList<Film> getFilms() {
+        return films;
     }
 
     public ObservableList<String> dajNaziveFilmova(){
         ObservableList<String> naziviFilmova = FXCollections.observableArrayList();
-        for (Film x:filmovi
-             ) {naziviFilmova.add(x.getNaziv());
+        for (Film x: films
+             ) {naziviFilmova.add(x.getTitle());
 
         }
         return naziviFilmova;
     }
 
-    public ObservableList<String> dajNaziveSerija(){
+    public ObservableList<String> getSerialsTitles(){
         ObservableList<String> naziviSerija = FXCollections.observableArrayList();
-        for (Serija x:serije
-        ) {naziviSerija.add(x.getNaziv());
+        for (Serial x: serials
+        ) {naziviSerija.add(x.getTitle());
 
         }
         return naziviSerija;
     }
 
-    public ObservableList<String> dajFilmoveZaZanr(String zanr){
+    public ObservableList<String> getFilmForType(String zanr){
         ObservableList<String> naziviFilmova = FXCollections.observableArrayList();
-        for (Film x:filmovi
-        ) {if(x.getZanr().equals(zanr)) naziviFilmova.add(x.getNaziv());
+        for (Film x: films
+        ) {if(x.getType().equals(zanr)) naziviFilmova.add(x.getTitle());
 
         }
         return naziviFilmova;
     }
 
 
-    public ObservableList<String> dajSerijeZaZanr (String zanr){
+    public ObservableList<String> gerSerialsForType(String zanr){
         ObservableList<String> naziviSerija = FXCollections.observableArrayList();
-        for (Serija x:serije
-        ) {if(x.getZanr().equals(zanr)) naziviSerija.add(x.getNaziv());
+        for (Serial x: serials
+        ) {if(x.getType().equals(zanr)) naziviSerija.add(x.getTitle());
 
         }
         return naziviSerija;
     }
 
-    public Film pronadjiFilm(String naziv){
+    public Film findFilm(String naziv){
 
-        for (Film f:filmovi
+        for (Film f: films
              ) {
-            if(f.getNaziv().equals(naziv)) return f;
+            if(f.getTitle().equals(naziv)) return f;
         }
         return null;
     }
 
-    public Serija pronadjiSeriju(String naziv){
+    public Serial findSerial(String naziv){
 
-        for (Serija f:serije
+        for (Serial f: serials
         ) {
-            if(f.getNaziv().equals(naziv)) return f;
+            if(f.getTitle().equals(naziv)) return f;
         }
         return null;
     }
 
 
-    public ObservableList<String> dajNaziveZanrova(){
+    public ObservableList<String> getFilmsTypes(){
         ObservableList<String> naziviZanrova = FXCollections.observableArrayList();
-        for (Film x:filmovi
-        ) {if(!naziviZanrova.contains(x.getZanr()))naziviZanrova.add(x.getZanr());
+        for (Film x: films
+        ) {if(!naziviZanrova.contains(x.getType()))naziviZanrova.add(x.getType());
 
         }
         return naziviZanrova;
     }
 
 
-    public ObservableList<String> dajNaziveZanrovaSerija(){
+    public ObservableList<String> getSerialsTypes(){
         ObservableList<String> naziviZanrova = FXCollections.observableArrayList();
-        for (Serija x:serije
-        ) {if(!naziviZanrova.contains(x.getZanr()))naziviZanrova.add(x.getZanr());
+        for (Serial x: serials
+        ) {if(!naziviZanrova.contains(x.getType()))naziviZanrova.add(x.getType());
 
         }
         return naziviZanrova;
     }
 
-    public ObservableList<Sezona> dajSezoneSerije(String nazivSerije){
+    public ObservableList<Season> getSerialSeasons(String nazivSerije){
 
 
-        ObservableList<Sezona> sezoneSerije = FXCollections.observableArrayList();
-        for (Sezona x:sezone
-        ) {if(x.getIdSerije().equals(nazivSerije) ) sezoneSerije.add(x);
+        ObservableList<Season> seasons = FXCollections.observableArrayList();
+        for (Season x: seasone
+        ) {if(x.getSerialId().equals(nazivSerije) ) seasons.add(x);
 
         }
-        return sezoneSerije;
+        return seasons;
     }
 
-    public Korisnik pronadjiKorisnika(String korisnickoIme, String lozinka) throws SQLException {
+    public User findUser(String korisnickoIme, String lozinka) throws SQLException {
 
         try {
             PreparedStatement stm4 = conn.prepareStatement("SELECT ime, prezime, adresa, brojTelefona, datumUclanjivanja, korisnickoIme, lozinka FROM korisnici");
@@ -303,136 +304,136 @@ public class VideotekaModel {
 
         while (rs4.next()) {
             // System.out.println()
-            Korisnik korisnik = new Korisnik(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4), rs4.getDate(5), rs4.getString(6), rs4.getString(7));
+            User user = new User(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4), rs4.getDate(5), rs4.getString(6), rs4.getString(7));
 
-            korisnici.add(korisnik);
+            users.add(user);
 
-            if (trenutniKorisnik == null) trenutniKorisnik = new SimpleObjectProperty<Korisnik>(korisnik);
+            if (currentUser == null) currentUser = new SimpleObjectProperty<User>(user);
         }
 
 
-        for (Korisnik korisnik:korisnici){
-            if(korisnik.getKorisnickoIme().equals(korisnickoIme) && korisnik.getLozinka().equals(lozinka)) return korisnik;
+        for (User user : users){
+            if(user.getUserName().equals(korisnickoIme) && user.getPassword().equals(lozinka)) return user;
         }
         return null;
     }
 
 
-    public void setFilmovi(ObservableList<Film> filmovi) {
-        this.filmovi = filmovi;
+    public void setFilms(ObservableList<Film> films) {
+        this.films = films;
     }
 
-    public Film getTrenutniFilm() {
-        return trenutniFilm.get();
+    public Film getCurrentFilm() {
+        return currentFilm.get();
     }
 
-    public ObjectProperty<Film> trenutniFilmProperty() {
-        return trenutniFilm;
+    public ObjectProperty<Film> currentFilmProperty() {
+        return currentFilm;
     }
 
-    public void setTrenutniFilm(Film trenutniFilm) {
-        this.trenutniFilm.set(trenutniFilm);
+    public void setCurrentFilm(Film currentFilm) {
+        this.currentFilm.set(currentFilm);
     }
 
 
-    public void ispisiFilmove() {
+    public void printFilms() {
         System.out.println("Filmovi su:");
-        for (Film k : filmovi)
+        for (Film k : films)
             System.out.println(k);
     }
 
-    public void ispisiSerije() {
+    public void printSerials() {
         System.out.println("Serije su:");
-        for (Serija k : serije)
+        for (Serial k : serials)
             System.out.println(k);
     }
 
-    public ObservableList<Serija> getSerije() {
-        return serije;
+    public ObservableList<Serial> getSerials() {
+        return serials;
     }
 
-    public void setSerije(ObservableList<Serija> serije) {
-        this.serije = serije;
+    public void setSerials(ObservableList<Serial> serials) {
+        this.serials = serials;
     }
 
-    public Serija getTrenutnaSerija() {
-        return trenutnaSerija.get();
+    public Serial getCurrentSerial() {
+        return currentSerial.get();
     }
 
-    public ObjectProperty<Serija> trenutnaSerijaProperty() {
-        return trenutnaSerija;
+    public ObjectProperty<Serial> currentSerialProperty() {
+        return currentSerial;
     }
 
-    public void setTrenutnaSerija(Serija trenutnaSerija) {
-        this.trenutnaSerija.set(trenutnaSerija);
+    public void setCurrentSerial(Serial currentSerial) {
+        this.currentSerial.set(currentSerial);
     }
 
-    public ObservableList<Sezona> getSezone() {
-        return sezone;
+    public ObservableList<Season> getSeasone() {
+        return seasone;
     }
 
-    public void setSezone(ObservableList<Sezona> sezone) {
-        this.sezone = sezone;
+    public void setSeasone(ObservableList<Season> seasone) {
+        this.seasone = seasone;
     }
 
-    public Sezona getTrenutnaSezona() {
-        return trenutnaSezona.get();
+    public Season getCurrentSeasone() {
+        return currentSeasone.get();
     }
 
-    public ObjectProperty<Sezona> trenutnaSezonaProperty() {
-        return trenutnaSezona;
+    public ObjectProperty<Season> currentSeasoneProperty() {
+        return currentSeasone;
     }
 
-    public void setTrenutnaSezona(Sezona trenutnaSezona) {
-        this.trenutnaSezona.set(trenutnaSezona);
+    public void setCurrentSeasone(Season currentSeasone) {
+        this.currentSeasone.set(currentSeasone);
     }
 
-    public ObservableList<Korisnik> getKorisnici() {
-        return korisnici;
+    public ObservableList<User> getUsers() {
+        return users;
     }
 
-    public void setKorisnici(ObservableList<Korisnik> korisnici) {
-        this.korisnici = korisnici;
+    public void setUsers(ObservableList<User> users) {
+        this.users = users;
     }
 
-    public Korisnik getTrenutniKorisnik() {
-        return trenutniKorisnik.get();
+    public User getCurrentUser() {
+        return currentUser.get();
     }
 
-    public ObjectProperty<Korisnik> trenutniKorisnikProperty() {
-        return trenutniKorisnik;
+    public ObjectProperty<User> currentUserProperty() {
+        return currentUser;
     }
 
-    public void setTrenutniKorisnik(Korisnik trenutniKorisnik) {
-        this.trenutniKorisnik.set(trenutniKorisnik);
+    public void setCurrentUser(User currentUser) {
+        this.currentUser.set(currentUser);
     }
 
-    public void spremiNovogKorisnika(Korisnik korisnik) throws SQLException {
+    public void addNewUser(User user) throws SQLException {
 
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
         PreparedStatement unosKorisnika = conn.prepareStatement("INSERT INTO korisnici VALUES (?, ?, ?, ?, ?, ?, ?, ? )");
-        unosKorisnika.setString(2, korisnik.getIme());
-        unosKorisnika.setString(3, korisnik.getPrezime());
-        unosKorisnika.setString(4, korisnik.getAdresa());
-        unosKorisnika.setString(5, korisnik.getBrojTelefona());
-        unosKorisnika.setDate(6, Date.valueOf(simpleDateFormat.format(korisnik.getDatumUclanjivanja())));
-        unosKorisnika.setString(7, korisnik.getKorisnickoIme());
-        unosKorisnika.setString(8, korisnik.getLozinka());
+        unosKorisnika.setString(2, user.getName());
+        unosKorisnika.setString(3, user.getSurname());
+        unosKorisnika.setString(4, user.getAddress());
+        unosKorisnika.setString(5, user.getMobileNumber());
+        unosKorisnika.setDate(6, Date.valueOf(simpleDateFormat.format(user.getMembershipDate())));
+        unosKorisnika.setString(7, user.getUserName());
+        unosKorisnika.setString(8, user.getPassword());
         unosKorisnika.executeUpdate();
     }
 
-    public ArrayList<String> postojecaKorisnickaImena(){
+    public ArrayList<String> getCurrentUserNames(){
         ArrayList<String > korisnickaImena = new ArrayList<>();
-        for (Korisnik k: korisnici
+        for (User k: users
              ) {
-            korisnickaImena.add(k.getKorisnickoIme());
+            korisnickaImena.add(k.getUserName());
         }
         return korisnickaImena;
     }
 
-    public void spremiNoviNajam(String korisnikId, String filmId, String serijaId, String sezonaId, int logicka) throws SQLException {
+    public void addNewRent(String korisnikId, String filmId, String serijaId, String sezonaId, int logicka) throws SQLException {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
@@ -446,7 +447,7 @@ public class VideotekaModel {
         unosNajma.executeUpdate();
     }
 
-    public  void dohvatiNarudzbe() throws SQLException {
+    public  void getRents() throws SQLException {
         PreparedStatement stm = conn.prepareStatement("SELECT korisnickoIme, filmNaziv, serijaNaziv, sezonaNaziv, datumIznajmljivanja, aktivnaNarudzba FROM najam");
         ResultSet rs = stm.executeQuery();
 
@@ -454,21 +455,21 @@ public class VideotekaModel {
             System.out.println(rs.getString(1));
             System.out.println(rs.getString(2));
             System.out.println(String.valueOf(rs.getInt(6)));
-            System.out.println(getTrenutniKorisnik().getKorisnickoIme());
+            System.out.println(getCurrentUser().getUserName());
 
-            if(rs.getString(1).equals(getTrenutniKorisnik().getKorisnickoIme())) {
+            if(rs.getString(1).equals(getCurrentUser().getUserName())) {
                 if(rs.getString(2) != null){
-                    Film f = pronadjiFilm(rs.getString(2));
+                    Film f = findFilm(rs.getString(2));
                     if(rs.getInt(6)==1)
-                       // System.out.println(f.getNaziv());
-                    getTrenutniKorisnik().dodajUListuIznajmljenih(f);
-                    getTrenutniKorisnik().dodajUListuHistorije(f);
+                       // System.out.println(f.getTitle());
+                    getCurrentUser().addInOrderList(f);
+                    getCurrentUser().addInHistoryList(f);
                 }
                 else{
-                    Serija s = pronadjiSeriju(rs.getString(3));
+                    Serial s = findSerial(rs.getString(3));
                     if(rs.getInt(6)==1)
-                        getTrenutniKorisnik().dodajUListuIznajmljenih(s);
-                    getTrenutniKorisnik().dodajUListuHistorije(s);
+                        getCurrentUser().addInOrderList(s);
+                    getCurrentUser().addInHistoryList(s);
                 }
             }
 
@@ -477,26 +478,26 @@ public class VideotekaModel {
         }
     }
 
-    public void vratiNajam(Object o) throws SQLException {
+    public void returnRent(Object o) throws SQLException {
         if(o instanceof Film){
-            Film f = pronadjiFilm(((Film) o).getNaziv());
+            Film f = findFilm(((Film) o).getTitle());
             PreparedStatement vracanjeNajma = conn.prepareStatement("UPDATE najam SET aktivnaNarudzba=? WHERE korisnickoIme = ? AND  filmNaziv = ?");
             vracanjeNajma.setInt(1,0);
-            vracanjeNajma.setString(2, getTrenutniKorisnik().getKorisnickoIme());
-            vracanjeNajma.setString(3, ((Film) o).getNaziv());
+            vracanjeNajma.setString(2, getCurrentUser().getUserName());
+            vracanjeNajma.setString(3, ((Film) o).getTitle());
             vracanjeNajma.executeUpdate();
         }
         else{
-            Serija s = pronadjiSeriju(((Serija) o).getNaziv());
+            Serial s = findSerial(((Serial) o).getTitle());
             PreparedStatement vracanjeNajma = conn.prepareStatement("UPDATE najam SET aktivnaNarudzba=? WHERE korisnickoIme = ? AND  serijaNaziv = ?");
             vracanjeNajma.setInt(1,0);
-            vracanjeNajma.setString(2, getTrenutniKorisnik().getKorisnickoIme());
-            vracanjeNajma.setString(3, ((Serija) o).getNaziv());
+            vracanjeNajma.setString(2, getCurrentUser().getUserName());
+            vracanjeNajma.setString(3, ((Serial) o).getTitle());
             vracanjeNajma.executeUpdate();
         }
     }
 
-    public void ucitajXML() throws SQLException {
+    public void loadXML() throws SQLException {
         Document xmldoc = null;
         try {
             DocumentBuilder documentReader = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -515,27 +516,27 @@ public class VideotekaModel {
             Node dijete = djeca.item(i);
             if(dijete instanceof Element){
                 Film f=new Film();
-                f.setNaziv(((Element) dijete).getElementsByTagName("naziv").item(0).getTextContent());
-                f.setReziser(((Element) dijete).getElementsByTagName("reziser").item(0).getTextContent());
-                f.setZanr(((Element) dijete).getElementsByTagName("zanr").item(0).getTextContent());
-                f.setCijena(Double.parseDouble(((Element) dijete).getElementsByTagName("cijena").item(0).getTextContent()));
-                f.setVrijemeTrajanja(Integer.parseInt(((Element) dijete).getElementsByTagName("vrijemeTrajanja").item(0).getTextContent()));
+                f.setTitle(((Element) dijete).getElementsByTagName("title").item(0).getTextContent());
+                f.setDirector(((Element) dijete).getElementsByTagName("director").item(0).getTextContent());
+                f.setType(((Element) dijete).getElementsByTagName("type").item(0).getTextContent());
+                f.setPrice(Double.parseDouble(((Element) dijete).getElementsByTagName("price").item(0).getTextContent()));
+                f.setTime(Integer.parseInt(((Element) dijete).getElementsByTagName("time").item(0).getTextContent()));
 
-                System.out.println(listaFilmova.size());
+                System.out.println(filmsList.size());
 
                 boolean logicka = true;
-                for(int j=0; j<listaFilmova.size(); j++){
-                    if(listaFilmova.get(j).getNaziv().equals(f.getNaziv()))  logicka=false;
+                for(int j = 0; j< filmsList.size(); j++){
+                    if(filmsList.get(j).getTitle().equals(f.getTitle()))  logicka=false;
 
                 }
 
                 if(logicka){
                 PreparedStatement unosFilma = conn.prepareStatement("INSERT INTO filmovi VALUES (?, ?, ?, ?, ?, ?)");
-                unosFilma.setString(2, f.getNaziv());
-                unosFilma.setString(3, f.getReziser());
-                unosFilma.setString(4, f.getZanr());
-                unosFilma.setDouble(5, f.getCijena());
-                unosFilma.setInt(6, f.getVrijemeTrajanja());
+                unosFilma.setString(2, f.getTitle());
+                unosFilma.setString(3, f.getDirector());
+                unosFilma.setString(4, f.getType());
+                unosFilma.setDouble(5, f.getPrice());
+                unosFilma.setInt(6, f.getTime());
                 unosFilma.executeUpdate();}
 
                 System.out.println(f);
@@ -544,15 +545,15 @@ public class VideotekaModel {
 
     }
 
-    public void ucitajSerije(){
+    public void loadTXT(){
 
         Scanner ulaz=null;
-        ArrayList<Serija> serije = new ArrayList<>();
+        ArrayList<Serial> serije = new ArrayList<>();
 
         try {
-            ulaz = new Scanner(new FileReader("/home/samra/IdeaProjects/aplikacijaZaVideoteku/src/sample/serije.txt"));
+            ulaz = new Scanner(new FileReader("/home/samra/IdeaProjects/aplikacijaZaVideoteku/src/sample/serials.txt"));
         } catch (FileNotFoundException e) {
-            System.out.println("Datoteka serije.txt ne postoji ili se ne može otvoriti");
+            System.out.println("Datoteka serials.txt ne postoji ili se ne može otvoriti");
             System.out.println("Greška: " + e);
         }
 
@@ -563,22 +564,22 @@ public class VideotekaModel {
                     String naziv=line[0].trim();
                     String reziser = line[1].trim();
                     String zanr = line[2].trim();
-                    Serija s = new Serija(naziv,reziser,zanr);
+                    Serial s = new Serial(naziv,reziser,zanr);
                     System.out.println(s);
 
 
                     boolean logicka = true;
-                    for(int j=0; j<listaSerija.size(); j++){
-                        if(listaSerija.get(j).getNaziv().equals(s.getNaziv()))  logicka=false;
+                    for(int j = 0; j< serialsList.size(); j++){
+                        if(serialsList.get(j).getTitle().equals(s.getTitle()))  logicka=false;
 
                     }
 
                     if(logicka){
                         System.out.println("Tu sam");
                         PreparedStatement unoseSerije = conn.prepareStatement("INSERT INTO serije VALUES (?, ?, ?, ? )");
-                        unoseSerije.setString(2, s.getNaziv());
-                        unoseSerije.setString(3, s.getReziser());
-                        unoseSerije.setString(4, s.getZanr());
+                        unoseSerije.setString(2, s.getTitle());
+                        unoseSerije.setString(3, s.getDirector());
+                        unoseSerije.setString(4, s.getType());
                         unoseSerije.executeUpdate();}
                 }
         }
@@ -593,10 +594,10 @@ public class VideotekaModel {
 
     }
 
-    public static void  zapisiXml(){
+    public static void recordXML(){
         try{
 
-            XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("serije.xml"));
+            XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("serials.xml"));
             izlaz.writeObject(sz);
             izlaz.close();
 

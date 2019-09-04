@@ -15,13 +15,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        VideotekaModel model = VideotekaModel.dajInstancu();
+        VideotekaModel model = VideotekaModel.getInstance();
 
         Locale.setDefault(new Locale("bs","BA"));
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("prijava.fxml"), bundle);
-        loader.setController(new PrijavaController(model));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"), bundle);
+        loader.setController(new LoginController(model));
         Parent root = loader.load();
         primaryStage.setTitle("Videoteka");
         primaryStage.setScene(new Scene(root, 600, 350));

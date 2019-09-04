@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <?import java.net.URL?>
-<GridPane fx:id="pane" styleClass="body" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.GlavniIzbornikController">
+<GridPane fx:id="pane" styleClass="body" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="435.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MenuController">
     <stylesheets>
-        <URL value="@stil.css" />
+        <URL value="@style.css" />
     </stylesheets>
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -23,9 +23,9 @@
   </rowConstraints>
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="16.0" prefWidth="606.0" text="%glavniIzbornik" textAlignment="CENTER" />
-      <Button style="-fx-background-color: #ffffcc; " mnemonicParsing="false" onAction="#izborFilma" text="%filmovi" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-      <Button style="-fx-background-color:#ffffcc;" mnemonicParsing="false" onAction="#izborSerije" text="%serije" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-      <Button style="-fx-background-color: #ffffcc;" mnemonicParsing="false" onAction="#pregledajPodatke" text="%korisnik" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-      <Button style="-fx-background-color: #00cc66;" mnemonicParsing="false" onAction="#odjaviKorisnika" text="%odjava" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+      <Button style="-fx-background-color: #ffffcc; " mnemonicParsing="false" onAction="#filmChoice" text="%films" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+      <Button style="-fx-background-color:#ffffcc;" mnemonicParsing="false" onAction="#serialChoice" text="%serials" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <Button style="-fx-background-color: #ffffcc;" mnemonicParsing="false" onAction="#reviewData" text="%user" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+      <Button style="-fx-background-color: #00cc66;" mnemonicParsing="false" onAction="#signOutUser" text="%odjava" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
    </children>
 </GridPane>

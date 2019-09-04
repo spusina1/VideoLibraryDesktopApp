@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class PrintReport extends JFrame {
 
     public void showReport(Connection conn, String korisnickoIme) throws JRException {
-        String reportSrcFile = getClass().getResource("/reports/izvjestaj.jrxml").getFile();
+        String reportSrcFile = getClass().getResource("/reports/report.jrxml").getFile();
         String reportsDir = getClass().getResource("/reports/").getFile();
 
         String param = korisnickoIme;

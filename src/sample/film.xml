@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<filmovi>
+<films>
 
     <film>
-        <naziv>Film1</naziv>
-        <reziser>Reziser1</reziser>
-        <zanr>Zanr1</zanr>
-        <cijena>50</cijena>
-        <vrijemeTrajanja>120</vrijemeTrajanja>
+        <title>Film1</title>
+        <director>Reziser1</director>
+        <type>Zanr1</type>
+        <price>50</price>
+        <time>120</time>
     </film>
 
     <film>
-        <naziv>Film2</naziv>
-        <reziser>Reziser2</reziser>
-        <zanr>Zanr2</zanr>
-        <cijena>150</cijena>
-        <vrijemeTrajanja>130</vrijemeTrajanja>
+        <title>Film2</title>
+        <director>Reziser2</director>
+        <type>Zanr2</type>
+        <price>150</price>
+        <time>130</time>
     </film>
 
 
     <film>
-        <naziv>Film3</naziv>
-        <reziser>Reziser3</reziser>
-        <zanr>Zanr1</zanr>
-        <cijena>60</cijena>
-        <vrijemeTrajanja>125</vrijemeTrajanja>
+        <title>Film3</title>
+        <director>Reziser3</director>
+        <type>Zanr1</type>
+        <price>60</price>
+        <time>125</time>
     </film>
 
     <film>
-        <naziv>Film4</naziv>
-        <reziser>Reziser4</reziser>
-        <zanr>Zanr2</zanr>
-        <cijena>10</cijena>
-        <vrijemeTrajanja>100</vrijemeTrajanja>
+        <title>Film4</title>
+        <director>Reziser4</director>
+        <type>Zanr2</type>
+        <price>10</price>
+        <time>100</time>
     </film>
 
-</filmovi>
+</films>

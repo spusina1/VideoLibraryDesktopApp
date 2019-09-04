@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SZ implements Serializable {
-    private List<Serija> serije = new ArrayList<>();
+    private List<Serial> serials = new ArrayList<>();
 
-    public List<Serija> getSerije() {
-        return serije;
+    public List<Serial> getSerials() {
+        return serials;
     }
 
-    public void setSerije(List<Serija> sezone) {
-        this.serije = sezone;
+    public void setSerials(List<Serial> sezone) {
+        this.serials = sezone;
     }
 }
