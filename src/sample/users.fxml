@@ -56,7 +56,7 @@
                 <Label text="%historijaPregleda" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="11" />
                 <ListView fx:id="historyList" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="12" GridPane.rowSpan="4" />
       <Button fx:id="btnVrati" mnemonicParsing="false" onAction="#returnFilm" style="-fx-background-color: #00cc66;" text="%vrati" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="16" GridPane.valignment="CENTER" />
-                <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#print" style="-fx-background-color: #00cc66;" text="izvjestaj" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="16" />
+                <Button fx:id="btnIzvjestaj" mnemonicParsing="false" onAction="#print" style="-fx-background-color: #00cc66;" text="%izvjestaj" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="16" />
 
             </children>
 </GridPane>

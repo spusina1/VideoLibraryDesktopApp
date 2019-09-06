@@ -8,9 +8,9 @@ import javafx.scene.control.TextField;
 
 import java.sql.SQLException;
 
-public class SerialsController {
+public class SeriesController {
 
-    private VideotekaModel model;
+    private VideoLibraryModel model;
 
     public ChoiceBox<String> serialChoice;
     public ChoiceBox<String> typeChoice;
@@ -21,24 +21,27 @@ public class SerialsController {
     public TextField serialTime;
     public TextField serialPrice;
 
-    public SerialsController(VideotekaModel m) {
+    public SeriesController(VideoLibraryModel m) {
         model = m;
     }
 
     @FXML
     public void initialize() {
 
+        typeChoice.getItems().clear();
         typeChoice.setItems(model.getSerialsTypes());
 
     }
     public void selectedType(ActionEvent actionEvent){
         model.setCurrentType(typeChoice.getValue());
-        serialChoice.setItems(model.gerSerialsForType(typeChoice.getValue()));
+        serialChoice.getItems().clear();
+        serialChoice.setItems(model.getSerialsForType(typeChoice.getValue()));
     }
 
     public void selectedSerial(ActionEvent actionEvent) {
         System.out.println("Promijenjen je trenutnia serija na: " + serialChoice.getValue());
         model.setCurrentSerial(model.findSerial(serialChoice.getValue()));
+        seasonChoice.getItems().clear();
         seasonChoice.setItems(model.getSerialSeasons(serialChoice.getValue()));
 
     }
@@ -54,17 +57,17 @@ public class SerialsController {
         }
     }
 
+    /*  Metoda koja se poziva klikom na button naruci u prozoru series.
+      U ovoj metodi se iz baze dobavljaju svi najmovi korisnika koji su aktivni,
+      te se provjerava da li je korisnik u mogucnosti iznajmiti novi sadržaj.
+   */
     public void orderSerial(ActionEvent actionEvent) throws SQLException {
 
-        model.getCurrentUser().getOrderList().clear();
-        model.getCurrentUser().getHistoryList().clear();
 
         model.getRents();
 
         if(model.getCurrentUser().getOrderList().size()<4){
 
-
-            System.out.println(model.getCurrentUser().getOrderList().size());
             model.addNewRent(model.getCurrentUser().getUserName(), null, model.getCurrentSerial().getTitle(), model.getCurrentSeasone().getTitle(), 1);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

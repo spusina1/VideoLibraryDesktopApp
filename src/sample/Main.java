@@ -15,7 +15,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        VideotekaModel model = VideotekaModel.getInstance();
+        VideoLibraryModel model = VideoLibraryModel.getInstance();
 
         Locale.setDefault(new Locale("bs","BA"));
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");

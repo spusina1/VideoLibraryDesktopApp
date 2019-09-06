@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class UsersController {
 
-    private VideotekaModel model;
+    private VideoLibraryModel model;
 
     public TextField userName;
     public TextField userSurname;
@@ -24,7 +24,7 @@ public class UsersController {
     public ListView orderList;
     public ListView historyList;
 
-    public UsersController(VideotekaModel m) {
+    public UsersController(VideoLibraryModel m) {
         model = m;
     }
 
@@ -49,7 +49,7 @@ public class UsersController {
 
         try {
             Date datumIsteka = simpleDateFormat.parse(godina + "-" + mjesecIsteka + "-" + danIsteka);
-            System.out.println(datumIsteka);
+
             userMembershipExpirationDate.setText(simpleDateFormat.format(datumIsteka));
         } catch (ParseException e) {
             e.printStackTrace();
@@ -68,6 +68,10 @@ public class UsersController {
 
     }
 
+    /*
+    Ova metoda pozivom metode iz klase VideotekaLibraryModel postavlja aktivnost izabranog sadrzaja na 0
+    te ga brise iz liste iznajmljenih sadrzaja.
+     */
     public void returnFilm(ActionEvent actionEvent) throws SQLException {
         orderList.getSelectionModel().getSelectedItem();
         model.returnRent(orderList.getSelectionModel().getSelectedItem());

@@ -54,58 +54,6 @@
      </void>
     </object>
    </void>
-   <void method="add">
-    <object class="sample.Serial">
-     <void property="director">
-      <string>Reziser1</string>
-     </void>
-     <void property="title">
-      <string>Serija1</string>
-     </void>
-     <void property="type">
-      <string>Zanr1</string>
-     </void>
-    </object>
-   </void>
-   <void method="add">
-    <object class="sample.Serial">
-     <void property="director">
-      <string>Reziser2</string>
-     </void>
-     <void property="title">
-      <string>Serija2</string>
-     </void>
-     <void property="type">
-      <string>Zanr1</string>
-     </void>
-    </object>
-   </void>
-   <void method="add">
-    <object class="sample.Serial">
-     <void property="director">
-      <string>Reziser3</string>
-     </void>
-     <void property="title">
-      <string>Serija3</string>
-     </void>
-     <void property="type">
-      <string>Zanr2</string>
-     </void>
-    </object>
-   </void>
-   <void method="add">
-    <object class="sample.Serial">
-     <void property="director">
-      <string>Reziser4</string>
-     </void>
-     <void property="title">
-      <string>Serija4</string>
-     </void>
-     <void property="type">
-      <string>Zanr2</string>
-     </void>
-    </object>
-   </void>
   </void>
  </object>
 </java>

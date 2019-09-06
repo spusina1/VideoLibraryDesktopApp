@@ -1,6 +1,6 @@
 package sample;
 
-public class IllegalOrderException  extends IllegalArgumentException {
+public class IllegalOrderException  extends Exception {
     IllegalOrderException(){}
     IllegalOrderException(String st){
         super(st);

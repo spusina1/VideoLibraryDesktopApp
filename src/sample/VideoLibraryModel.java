@@ -22,12 +22,18 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 
-public class VideotekaModel {
+public class VideoLibraryModel implements Documents{
+
+    /*
+    Ova klasa je singleton, instancira se samo jednom,
+    a instanci je omogucen globalni pristup preko metode getInstance()
+    iz ostalih klasa. Uz to je ova klasa i kontejnerska klasa.
+     */
 
     private ObservableList<Film> films = FXCollections.observableArrayList();
     private ObjectProperty<Film> currentFilm = null;
     private List<Film> filmsList =new ArrayList<>();
-    public List<Serial> serialsList = new ArrayList<>();
+    private List<Serial> serialsList = new ArrayList<>();
 
     private static SZ sz = new SZ();
 
@@ -54,7 +60,7 @@ public class VideotekaModel {
         this.currentType = currentType;
     }
 
-    private static VideotekaModel instanca = null;
+    private static VideoLibraryModel instanca = null;
 
     public Connection getConn() {
         return conn;
@@ -63,9 +69,12 @@ public class VideotekaModel {
     private Connection conn;
     private PreparedStatement stmt, stmt2, stmt3, stm4;
 
-    private VideotekaModel() {
+    private VideoLibraryModel() {
 
 
+        /*
+        Konekcija s bazom i provjera ispravnosti iste.
+         */
         try {
             conn = DriverManager.getConnection("jdbc:sqlite:resources/baza.db");
             System.out.println(conn);
@@ -80,7 +89,7 @@ public class VideotekaModel {
             ResultSet rs4 = stm4.executeQuery();
 
             while (rs.next()) {
-                // System.out.println()
+
                 Film k = new Film(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4), rs.getInt(5));
 
                 films.add(k);
@@ -99,7 +108,7 @@ public class VideotekaModel {
                 if (currentSerial == null) currentSerial = new SimpleObjectProperty<Serial>(s);
             }
             while (rs3.next()) {
-                // System.out.println()
+
                 Season season = new Season(rs3.getString(1), rs3.getInt(2), rs3.getDouble(3), rs3.getString(4));
 
                 seasone.add(season);
@@ -107,7 +116,7 @@ public class VideotekaModel {
                 if (currentSeasone == null) currentSeasone = new SimpleObjectProperty<Season>(season);
             }
             while (rs4.next()) {
-                // System.out.println()
+
                 User user = new User(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4), rs4.getDate(5), rs4.getString(6), rs4.getString(7));
 
                 users.add(user);
@@ -122,6 +131,11 @@ public class VideotekaModel {
         }
 
         if (currentFilm == null) currentFilm = new SimpleObjectProperty<>();
+
+        films.clear();
+        serials.clear();
+
+
 
 
         try {
@@ -193,10 +207,10 @@ public class VideotekaModel {
     }
 
     private static void initialize() {
-        instanca = new VideotekaModel();
+        instanca = new VideoLibraryModel();
     }
 
-    public static VideotekaModel getInstance() {
+    public static VideoLibraryModel getInstance() {
         if (instanca == null) initialize();
         return instanca;
     }
@@ -234,7 +248,7 @@ public class VideotekaModel {
     }
 
 
-    public ObservableList<String> gerSerialsForType(String zanr){
+    public ObservableList<String> getSerialsForType(String zanr){
         ObservableList<String> naziviSerija = FXCollections.observableArrayList();
         for (Serial x: serials
         ) {if(x.getType().equals(zanr)) naziviSerija.add(x.getTitle());
@@ -451,6 +465,10 @@ public class VideotekaModel {
         PreparedStatement stm = conn.prepareStatement("SELECT korisnickoIme, filmNaziv, serijaNaziv, sezonaNaziv, datumIznajmljivanja, aktivnaNarudzba FROM najam");
         ResultSet rs = stm.executeQuery();
 
+        getCurrentUser().getOrderList().clear();
+        getCurrentUser().getHistoryList().clear();
+
+        System.out.println("Velicina prije " + getCurrentUser().getOrderList().size());
         while (rs.next()) {
             System.out.println(rs.getString(1));
             System.out.println(rs.getString(2));
@@ -462,6 +480,7 @@ public class VideotekaModel {
                     Film f = findFilm(rs.getString(2));
                     if(rs.getInt(6)==1)
                        // System.out.println(f.getTitle());
+
                     getCurrentUser().addInOrderList(f);
                     getCurrentUser().addInHistoryList(f);
                 }
@@ -474,8 +493,9 @@ public class VideotekaModel {
             }
 
 
-
         }
+
+        System.out.println("Velicina poslije " + getCurrentUser().getOrderList().size());
     }
 
     public void returnRent(Object o) throws SQLException {
@@ -486,6 +506,7 @@ public class VideotekaModel {
             vracanjeNajma.setString(2, getCurrentUser().getUserName());
             vracanjeNajma.setString(3, ((Film) o).getTitle());
             vracanjeNajma.executeUpdate();
+
         }
         else{
             Serial s = findSerial(((Serial) o).getTitle());
@@ -495,8 +516,18 @@ public class VideotekaModel {
             vracanjeNajma.setString(3, ((Serial) o).getTitle());
             vracanjeNajma.executeUpdate();
         }
+
+       // getCurrentUser().getOrderList().remove(o);
     }
 
+    /*
+    metode interfejsa Documents
+    loadXML() - provjerava validnost film.xml fajla te na osnovu podataka popunjava tabelu baze filmovi
+    loadTXT() - provjerava validnost series.txt datoteke te sadrzaj zapisuje u tabelu serije
+    recordXML() - zapisuje serije pohranjene u listi klase SZ u serials.txt datoteku
+     */
+
+    @Override
     public void loadXML() throws SQLException {
         Document xmldoc = null;
         try {
@@ -522,8 +553,6 @@ public class VideotekaModel {
                 f.setPrice(Double.parseDouble(((Element) dijete).getElementsByTagName("price").item(0).getTextContent()));
                 f.setTime(Integer.parseInt(((Element) dijete).getElementsByTagName("time").item(0).getTextContent()));
 
-                System.out.println(filmsList.size());
-
                 boolean logicka = true;
                 for(int j = 0; j< filmsList.size(); j++){
                     if(filmsList.get(j).getTitle().equals(f.getTitle()))  logicka=false;
@@ -539,21 +568,21 @@ public class VideotekaModel {
                 unosFilma.setInt(6, f.getTime());
                 unosFilma.executeUpdate();}
 
-                System.out.println(f);
             }
         }
 
     }
 
+    @Override
     public void loadTXT(){
 
         Scanner ulaz=null;
         ArrayList<Serial> serije = new ArrayList<>();
 
         try {
-            ulaz = new Scanner(new FileReader("/home/samra/IdeaProjects/aplikacijaZaVideoteku/src/sample/serials.txt"));
+            ulaz = new Scanner(new FileReader("/home/samra/IdeaProjects/aplikacijaZaVideoteku/src/sample/series.txt"));
         } catch (FileNotFoundException e) {
-            System.out.println("Datoteka serials.txt ne postoji ili se ne može otvoriti");
+            System.out.println("Datoteka series.txt ne postoji ili se ne može otvoriti");
             System.out.println("Greška: " + e);
         }
 
@@ -565,8 +594,6 @@ public class VideotekaModel {
                     String reziser = line[1].trim();
                     String zanr = line[2].trim();
                     Serial s = new Serial(naziv,reziser,zanr);
-                    System.out.println(s);
-
 
                     boolean logicka = true;
                     for(int j = 0; j< serialsList.size(); j++){
@@ -575,7 +602,7 @@ public class VideotekaModel {
                     }
 
                     if(logicka){
-                        System.out.println("Tu sam");
+
                         PreparedStatement unoseSerije = conn.prepareStatement("INSERT INTO serije VALUES (?, ?, ?, ? )");
                         unoseSerije.setString(2, s.getTitle());
                         unoseSerije.setString(3, s.getDirector());
@@ -594,14 +621,14 @@ public class VideotekaModel {
 
     }
 
-    public static void recordXML(){
+    @Override
+    public void recordXML(){
         try{
 
             XMLEncoder izlaz = new XMLEncoder(new FileOutputStream("serials.xml"));
             izlaz.writeObject(sz);
             izlaz.close();
 
-            System.out.println("Tu sam");
         }
         catch (Exception e){
             System.out.println("Greška: " + e);

@@ -42,11 +42,9 @@ public class LoginController implements Initializable{
 
     public static Locale appLanguage = new Locale("bs", "BA");;
 
+    private VideoLibraryModel model;
 
-    private VideotekaModel model;
-
-
-    public LoginController(VideotekaModel m) {
+    public LoginController(VideoLibraryModel m) {
         model = m;
     }
 
@@ -73,11 +71,6 @@ public class LoginController implements Initializable{
 
     public void logIn(ActionEvent actionEvent) throws SQLException {
 
-
-        //otvaranje novog prozora
-        //System.out.println(userName.getText());
-
-
         User currentUser = model.findUser(userName.getText(), password.getText());
         model.setCurrentUser(currentUser);
         if(currentUser ==null) {
@@ -102,10 +95,7 @@ public class LoginController implements Initializable{
             userName.getStyleClass().removeAll("poljeNijeIspravno");
             try{
 
-               System.out.println(model.getCurrentUser());
-
                Locale.setDefault(appLanguage);
-                System.out.println("Trenutni language " + appLanguage);
                 ResourceBundle bundle = ResourceBundle.getBundle("Translation");
                 Parent root= FXMLLoader.load(getClass().getResource("menu.fxml"), bundle);
                 Stage stage=new Stage();
@@ -298,7 +288,7 @@ public class LoginController implements Initializable{
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             User newUser =  new User(name.getText(), surname.getText(), address.getText(), mobileNumber.getText(), new Date(), newUserName.getText(), newPassword.getText());
-            System.out.println(newUser);
+
             try {
                 model.addNewUser(newUser);
                 model.setCurrentUser(newUser);
@@ -332,7 +322,7 @@ public class LoginController implements Initializable{
     private void selectLanguage(Locale j) {
         Stage primaryStage = (Stage)main.getScene().getWindow();
         appLanguage = j;
-        System.out.println(appLanguage);
+
         Locale.setDefault(appLanguage);
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         Parent root = null;

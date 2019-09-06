@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class FilmsController {
 
-    private VideotekaModel model;
+    private VideoLibraryModel model;
 
     public ChoiceBox<String> filmChoice;
     public ChoiceBox<String> typeChoice;
@@ -22,7 +22,7 @@ public class FilmsController {
     public  TextField filmTime;
     public static BorderPane paneFilm;
 
-    public FilmsController(VideotekaModel m) {
+    public FilmsController(VideoLibraryModel m) {
         model = m;
     }
 
@@ -71,13 +71,15 @@ public class FilmsController {
         filmTime.setText(String.valueOf(model.getCurrentFilm().getTime()));}
     }
 
+    /*  Metoda koja se poziva klikom na button naruci u prozoru films.
+        U ovoj metodi se iz baze dobavljaju svi najmovi korisnika koji su aktivni,
+        te se provjerava da li je korisnik u mogucnosti iznajmiti novi sadržaj.
+     */
     public void orderFilm(ActionEvent actionEvent) throws SQLException {
+
+
         model.getRents();
-
-        if(model.getCurrentUser().getOrderList().size()<=4){
-
-
-        System.out.println(model.getCurrentUser().getOrderList().size());
+        if(model.getCurrentUser().getOrderList().size()<4){
         model.addNewRent(model.getCurrentUser().getUserName(), model.getCurrentFilm().getTitle(), null, null, 1);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -94,7 +96,6 @@ public class FilmsController {
                 throw izuzetak;
                 }
           catch (IllegalOrderException o){
-            System.out.println("Izuzetak");
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
              alert.setTitle("Error Dialog");

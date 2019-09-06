@@ -17,12 +17,17 @@ public class MenuController {
     public GridPane pane;
 
 
-    VideotekaModel model = VideotekaModel.getInstance();
+    VideoLibraryModel model = VideoLibraryModel.getInstance();
+
+
+    /*
+    Svaka od metoda se poziva prilikom klika na neki button
+    prozpra menu. U skaldu s odabirom buttona otvara se odgovarajuci novi prozor.
+     */
 
     public void filmChoice(javafx.event.ActionEvent actionEvent) throws IOException {
 
         Locale.setDefault(appLanguage);
-        System.out.println("Trenutni language " + appLanguage);
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("films.fxml"), bundle);
@@ -42,12 +47,12 @@ public class MenuController {
     public void serialChoice(javafx.event.ActionEvent actionEvent) throws IOException {
 
         Locale.setDefault(appLanguage);
-        System.out.println("Trenutni language " + appLanguage);
+
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("serials.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("series.fxml"), bundle);
 
-        loader.setController(new SerialsController(model));
+        loader.setController(new SeriesController(model));
         Parent root =  loader.load();
 
         Stage primaryStage = new Stage();
@@ -63,7 +68,7 @@ public class MenuController {
 
 
         Locale.setDefault(appLanguage);
-        System.out.println("Trenutni language " + appLanguage);
+
         ResourceBundle bundle = ResourceBundle.getBundle("Translation");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("users.fxml"), bundle);
 
