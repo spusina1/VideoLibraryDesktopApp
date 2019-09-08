@@ -124,6 +124,57 @@ public class VideoLibraryModel implements Documents{
                 if (currentUser == null) currentUser = new SimpleObjectProperty<User>(user);
             }
 
+            if(seasone.isEmpty()){
+                PreparedStatement unosSezona = conn.prepareStatement("INSERT INTO sezone VALUES (?,?,?,?,?)");
+                unosSezona.setString(2,"Sezona1");
+                unosSezona.setInt(3, 50);
+                unosSezona.setDouble(4, 56);
+                unosSezona.setString(5, "Serija1");
+                unosSezona.executeUpdate();
+
+                unosSezona.setString(2,"Sezona2");
+                unosSezona.setInt(3, 40);
+                unosSezona.setDouble(4, 41);
+                unosSezona.setString(5, "Serija1");
+                unosSezona.executeUpdate();
+
+                unosSezona.setString(2,"Sezona1");
+                unosSezona.setInt(3, 50);
+                unosSezona.setDouble(4, 56);
+                unosSezona.setString(5, "Serija2");
+                unosSezona.executeUpdate();
+
+                unosSezona.setString(2,"Sezona1");
+                unosSezona.setInt(3, 50);
+                unosSezona.setDouble(4, 56);
+                unosSezona.setString(5, "Serija3");
+                unosSezona.executeUpdate();
+
+                unosSezona.setString(2,"Sezona1");
+                unosSezona.setInt(3, 50);
+                unosSezona.setDouble(4, 56);
+                unosSezona.setString(5, "Serija4");
+                unosSezona.executeUpdate();
+
+                unosSezona.setString(2,"Sezona1");
+                unosSezona.setInt(3, 50);
+                unosSezona.setDouble(4, 56);
+                unosSezona.setString(5, "Serija5");
+                unosSezona.executeUpdate();
+
+
+                rs3 = stmt3.executeQuery();
+                while (rs3.next()) {
+
+                    Season season = new Season(rs3.getString(1), rs3.getInt(2), rs3.getDouble(3), rs3.getString(4));
+
+                    seasone.add(season);
+
+                    if (currentSeasone == null) currentSeasone = new SimpleObjectProperty<Season>(season);
+                }
+            }
+
+
 
 
         } catch(SQLException e) {
