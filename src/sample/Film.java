@@ -6,11 +6,9 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Objects;
 
-public class Film {
+public class Film extends Content{
 
-    private SimpleStringProperty title = new SimpleStringProperty("");
-    private SimpleStringProperty director = new SimpleStringProperty("");
-    private SimpleStringProperty type = new SimpleStringProperty("");
+
     private SimpleIntegerProperty time = new SimpleIntegerProperty(0);
     private SimpleDoubleProperty price = new SimpleDoubleProperty(0.0);
 
@@ -18,49 +16,13 @@ public class Film {
     }
 
     public Film(String title, String director, String type, double price, int time) {
-        this.title =new SimpleStringProperty(title);
-        this.director = new SimpleStringProperty(director);
-        this.type = new SimpleStringProperty(type);
+
+        super(title, director, type);
         this.time = new SimpleIntegerProperty(time);
         this.price = new SimpleDoubleProperty(price);
     }
 
 
-    public String getTitle() {
-        return title.get();
-    }
-
-    public SimpleStringProperty titleProperty() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title.set(title);
-    }
-
-    public String getDirector() {
-        return director.get();
-    }
-
-    public SimpleStringProperty directorProperty() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director.set(director);
-    }
-
-    public String getType() {
-        return type.get();
-    }
-
-    public SimpleStringProperty typeProperty() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type.set(type);
-    }
 
     public int getTime() {
         return time.get();
@@ -89,7 +51,7 @@ public class Film {
 
     @Override
     public String toString() {
-        return title.get()+ ", " + director.get() + ", " + type.get() + ", " + price.get() + "KM";
+        return getTitle() +  ", " + getDirector() + ", " + getType() + ", " + price.get() + "KM";
     }
 
 
@@ -98,11 +60,11 @@ public class Film {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Film film = (Film) o;
-        return title.equals(film.title);
+        return getTitle().equals(film.getTitle());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, director, type, time, price);
+        return Objects.hash(getTitle(), getDirector(), getType(), time, price);
     }
 }
